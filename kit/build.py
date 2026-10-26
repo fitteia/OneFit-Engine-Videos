@@ -2,20 +2,18 @@ import json, math, os, re, subprocess, sys, wave
 import numpy as np
 from PIL import Image, ImageDraw, ImageFont
 
-D = os.path.dirname(os.path.abspath(__file__))
+# Run from a video's build folder (make.sh does): its narration.py holds the
+# script and the pictures, and out/ there holds this build.
+KIT = os.path.dirname(os.path.abspath(__file__))
+D = os.getcwd()
 sys.path.insert(0, D)
-from narration import SECTIONS
+from narration import SECTIONS, IMAGES
 
-VOICE = os.environ.get("OFE_VOICE", os.path.join(D, "voices", "en_GB-alba-medium.onnx"))
+VOICE = os.environ.get("OFE_VOICE", os.path.join(KIT, "voices", "en_GB-alba-medium.onnx"))
 OUT = os.path.join(D, "out"); os.makedirs(OUT, exist_ok=True)
 W, H, FPS = 1920, 1080, 30
 BASE_LS, NOISE, NOISE_W = 1.1, 0.72, 0.85
 LEAD, GAP, TAIL, XF = 0.75, 0.5, 1.1, 0.6
-IMAGES = {
-    "title": "slides/title.png", "cli1": "slides/cli1.png", "cli2": "slides/cli2.png",
-    "start": "slides/start.png", "modes": "slides/modes.png", "close": "slides/close.png",
-    "fit": "shots/10-fit-compact.png", "figures": "shots/22-fig-clean.png", "report": "shots/31-report-full.png", "report_top": "shots/30-report.png",
-}
 only = set(sys.argv[1:])
 
 # --- narration -------------------------------------------------------------
@@ -130,6 +128,18 @@ def cam_rect(img, cam):
     x = min(max(x, 0), iw - w); y = min(max(y, 0), ih - h)
     return (x, y, w, h)
 
+# A highlight is a box (x0, y0, x1, y1) in picture pixels, a list of them, or
+# a name ("slide:name") or list of names from slides/boxes.json, which
+# render-slides.cjs writes for the slide elements marked data-hl.
+SLIDE_BOXES = None
+def hl_boxes(hl):
+    global SLIDE_BOXES
+    if isinstance(hl, str): hl = [hl]
+    if isinstance(hl, list) and hl and isinstance(hl[0], str):
+        if SLIDE_BOXES is None: SLIDE_BOXES = json.load(open(os.path.join(D, "slides", "boxes.json")))
+        return [tuple(SLIDE_BOXES[n]) for n in hl]
+    return hl
+
 FONT = ImageFont.truetype("/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf", 30)
 
 # The camera is continuous: consecutive sentences with the same picture and
@@ -186,11 +196,11 @@ def render_section(si, tl, imgs, t):
         prev = view(sh[g - 1]["img"], camera(sh, g - 1, t))
         frame = Image.blend(prev, frame, ease((t - sh[g]["start"]) / PICTURE_XF))
     # highlight: spotlight + outline
-    hl = S[k][5]
+    hl = hl_boxes(S[k][5])
     if hl:
         boxes = hl if isinstance(hl, list) else [hl]
-        nxt = S[k + 1][5] if k + 1 < len(S) else None
-        prv = S[k - 1][5] if k > 0 else None
+        nxt = hl_boxes(S[k + 1][5]) if k + 1 < len(S) else None
+        prv = hl_boxes(S[k - 1][5]) if k > 0 else None
         alpha = 1.0 if prv == hl else ease((t - (sents[k][0] - 0.1)) / 0.45)
         if nxt != hl:
             end = sents[k + 1][0] - LEAD_IN if k + 1 < len(S) else tl["end"] - 0.2

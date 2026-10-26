@@ -16,16 +16,15 @@ The Terminal scene shows the ordinary shell. The narration describes an optional
 
 ## Building
 
-Needs Python 3 with `numpy`, `Pillow` and `piper-tts`, ffmpeg with libx264, and Node.js for the slides (`npm install` in `build/`, which installs `playwright-core`; set `CHROME` to a Chromium binary if Playwright has none of its own).
+Needs Python 3 with `numpy`, `Pillow` and `piper-tts`, ffmpeg with libx264, and Node.js for the slides (`npm install` at the top of this repository, which installs `playwright-core`; set `CHROME` to a Chromium binary if Playwright has none of its own).
 
 ```sh
-cd introduction/build
 npm install
-./get-voice.sh
-./make.sh
+kit/get-voice.sh
+introduction/build/make.sh
 ```
 
-`make.sh` renders the slides, synthesizes the narration sentence by sentence (`narration.py` holds each sentence's caption text, spoken text, camera framing and highlight), renders the frames (`build.py`), normalizes the narration to −16 LUFS with a −1.5 dBTP ceiling, and writes `../ofe-go-gui-introduction.mp4` with its embedded subtitles, plus the `.srt` and the script. Piper's synthesis varies slightly from run to run, so each build's timings, and with them its subtitles, are its own: release the MP4 together with the `.srt` from the same build. To keep the voice of an existing build, run `REUSE_AUDIO=1 ./make.sh`: every sentence whose spoken text and pace are unchanged keeps its audio from the previous build in `build/out/`, and only changed sentences are voiced again. With no change to the narration, the narration and subtitles come out identical.
+`make.sh` runs the shared build in [`kit/`](../kit) on this folder: it renders the slides, synthesizes the narration sentence by sentence (`narration.py` holds each sentence's caption text, spoken text, camera framing and highlight, and names the video and its pictures), renders the frames (`kit/build.py`), normalizes the narration to −16 LUFS with a −1.5 dBTP ceiling, and writes `../ofe-go-gui-introduction.mp4` with its embedded subtitles, plus the `.srt` and the script. Piper's synthesis varies slightly from run to run, so each build's timings, and with them its subtitles, are its own: release the MP4 together with the `.srt` from the same build. To keep the voice of an existing build, run `REUSE_AUDIO=1 introduction/build/make.sh`: every sentence whose spoken text and pace are unchanged keeps its audio from the previous build in `build/out/`, and only changed sentences are voiced again. With no change to the narration, the narration and subtitles come out identical.
 
 The camera is continuous: sentences with the same picture and framing share one slow push-in (at most 3%), a new framing glides there from wherever the camera is (longer for bigger moves, zooming at an even pace), and a new picture crossfades in.
 

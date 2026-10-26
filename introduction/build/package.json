@@ -1,8 +1,0 @@
-{
-  "name": "ofe-introduction-video",
-  "private": true,
-  "description": "Renders the slides and captures the GUI screens of the OFE-Go and OFE-GUI introduction",
-  "dependencies": {
-    "playwright-core": "1.56.1"
-  }
-}

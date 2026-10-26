@@ -1,0 +1,194 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>slides</title>
+<style>
+  :root { --bg:#0f1418; --panel:#161d23; --ink:#e4edf5; --dim:#8fa3b5; --teal:#2cc4b5; --orange:#f2a64f; --blue:#4a9be0; --line:#26313a; }
+  html,body { margin:0; width:1920px; height:1080px; background:var(--bg); color:var(--ink); font-family:"Liberation Sans","DejaVu Sans",sans-serif; overflow:hidden; }
+  .slide { position:absolute; inset:0; display:none; padding:100px 140px; box-sizing:border-box;
+    background: radial-gradient(1200px 700px at 85% 15%, rgba(44,196,181,.10), transparent 60%), radial-gradient(900px 600px at 10% 95%, rgba(242,166,79,.08), transparent 60%), var(--bg); }
+  .slide.on { display:flex; flex-direction:column; justify-content:center; }
+  .kicker { font-size:30px; letter-spacing:.18em; text-transform:uppercase; color:var(--teal); font-weight:700; }
+  .kicker code { text-transform:none; letter-spacing:.02em; font-family:"DejaVu Sans Mono","Liberation Mono",monospace; }
+  h1 { font-size:96px; margin:24px 0 18px; line-height:1.05; }
+  h2 { font-size:68px; margin:18px 0 22px; line-height:1.1; }
+  .sub { font-size:40px; color:var(--dim); line-height:1.35; max-width:1500px; }
+  .brand { display:flex; align-items:center; gap:36px; }
+  .brand img { width:190px; }
+  .rule { height:6px; width:180px; background:linear-gradient(90deg,var(--teal),var(--orange)); border-radius:3px; margin:34px 0; }
+  .term { align-self:flex-start; margin-top:22px; background:#05080a; border:2px solid var(--line); border-radius:18px; padding:28px 38px; font-family:"DejaVu Sans Mono","Liberation Mono",monospace; font-size:26px; line-height:1.5; white-space:pre; color:#d6e2ec; box-shadow:0 30px 80px rgba(0,0,0,.5); }
+  .term span[data-hl] { display:inline-block; }
+  .p { color:#5fd38d; font-weight:700; } .hl { color:var(--orange); font-weight:700; } .m { color:var(--dim); }
+  .bar { align-self:flex-start; display:flex; gap:22px; flex-wrap:wrap; margin-top:30px; }
+  .chip { background:var(--panel); border:2px solid var(--line); border-radius:14px; padding:18px 28px; font-size:32px; }
+  .chip b { color:var(--teal); }
+  .cards { display:grid; grid-template-columns:repeat(2,1fr); gap:34px; margin-top:40px; }
+  .card { background:var(--panel); border:2px solid var(--line); border-radius:22px; padding:36px 40px; box-sizing:border-box; }
+  .card h3 { font-size:42px; margin:0 0 16px; font-family:"DejaVu Sans Mono","Liberation Mono",monospace; color:var(--teal); }
+  .card h3.plain { font-family:inherit; color:var(--ink); }
+  .card p { font-size:31px; color:var(--dim); line-height:1.4; margin:0; }
+  /* machines and tunnels */
+  .net { display:flex; align-items:stretch; gap:0; margin-top:34px; }
+  .host { border:3px solid var(--line); border-radius:24px; padding:26px 30px 30px; background:rgba(22,29,35,.85); display:flex; flex-direction:column; gap:16px; min-width:440px; box-sizing:border-box; }
+  .host.here { border-color:#3b5568; }
+  .host.there { border-color:#6b5532; }
+  .host .name { font-size:26px; letter-spacing:.14em; text-transform:uppercase; font-weight:700; color:var(--dim); }
+  .box { background:#0b1014; border:2px solid var(--line); border-radius:14px; padding:16px 22px; font-size:32px; }
+  .box small { display:block; font-size:24px; color:var(--dim); margin-top:4px; font-family:"DejaVu Sans Mono","Liberation Mono",monospace; }
+  .box.gui { border-color:var(--teal); }
+  .box.dim { opacity:.35; }
+  .link { flex:1; display:flex; flex-direction:column; justify-content:center; align-items:center; padding:0 20px; min-width:280px; }
+  .link .pipe { width:100%; height:16px; border-radius:8px; background:repeating-linear-gradient(90deg, var(--orange) 0 26px, transparent 26px 40px); }
+  .link .lbl { font-size:28px; color:var(--orange); font-weight:700; margin:14px 0; text-align:center; line-height:1.3; }
+  .link .lbl.top { margin-top:0; }
+  .rows { display:grid; grid-template-columns:auto 1fr; gap:18px 40px; margin-top:34px; align-items:baseline; }
+  .rows .k { font-family:"DejaVu Sans Mono","Liberation Mono",monospace; font-size:36px; color:var(--teal); font-weight:700; white-space:nowrap; }
+  .rows .v { font-size:34px; color:var(--ink); line-height:1.35; }
+  .rows .v span { color:var(--dim); }
+  .fine { font-size:31px; color:var(--dim); line-height:1.5; max-width:1600px; }
+  .flow { display:flex; align-items:center; gap:28px; margin:10px 0 50px; font-size:50px; font-weight:700; }
+  .flow span.a { color:var(--dim); font-weight:400; }
+  .badge { align-self:flex-start; display:inline-block; margin-top:46px; padding:14px 30px; border:3px solid var(--orange); color:var(--orange); border-radius:12px; font-size:30px; font-weight:700; letter-spacing:.2em; }
+</style></head>
+<body>
+
+<section class="slide" id="title">
+  <div class="brand"><img src="logo-dark.svg" alt=""><div>
+    <div class="kicker">OFE-GUI · remote hosts</div>
+    <h1>Fit on another computer</h1>
+    <div class="sub">the browser on your computer,<br>the fits on a server, over SSH</div>
+  </div></div>
+  <div class="rule" style="margin-left:226px"></div>
+  <div class="sub" style="margin-left:226px;font-size:32px">-ssh, and the alternatives</div>
+</section>
+
+<section class="slide" id="why">
+  <div class="kicker">Where OFE-GUI runs</div>
+  <h2>On its own, on your computer only</h2>
+  <div class="net">
+    <div class="host here" style="flex:1">
+      <div class="name">Your computer</div>
+      <div style="display:flex;gap:22px;align-items:center">
+        <div class="box">Browser<small>http://127.0.0.1:8143</small></div>
+        <div style="font-size:40px;color:var(--dim)">→</div>
+        <div class="box gui" data-hl="gui">OFE-GUI<small>listens on 127.0.0.1 only</small></div>
+        <div style="font-size:40px;color:var(--dim)">→</div>
+        <div class="box">onefite<small>the engine</small></div>
+        <div class="box">your files</div>
+      </div>
+    </div>
+  </div>
+  <div class="bar" data-hl="why"><div class="chip"><b>no login</b></div><div class="chip"><b>browses files</b> and <b>runs fits</b></div><div class="chip">so it never listens on the network</div></div>
+  <div class="bar" data-hl="ssh"><div class="chip" style="border-color:var(--orange)"><b style="color:var(--orange)">another computer?</b> SSH: your account, keys and settings</div></div>
+</section>
+
+<section class="slide" id="ssh1">
+  <div class="kicker"><code>onefite-gui -ssh</code></div>
+  <h2>Everything on the remote host</h2>
+  <div class="term" style="font-size:29px"><span class="p">$</span> onefite-gui <span data-hl="target"><span class="hl">-ssh ofe@192.168.64.113</span> \</span>
+<span data-hl="progs">    -remote-gui=/opt/onefite-go/bin/onefite-gui \
+    -onefite=/opt/onefite-go/bin/onefite \
+    -ofe-path=/opt/onefite-go \</span>
+<span data-hl="dir">    -remote-dir=ssh-demo -enable-terminal</span>
+<span data-hl="out"><span class="m">onefite-host-gui: forwarding http://127.0.0.1:8143/ to 127.0.0.1:18143 via ofe@192.168.64.113
+terminal: wrote /home/ofe/ssh-demo/AGENTS.md
+onefite-host-gui: serving http://127.0.0.1:18143/ (onefite: /opt/onefite-go/bin/onefite)</span></span></div>
+</section>
+
+<section class="slide" id="ssh2">
+  <div class="kicker"><code>onefite-gui -ssh</code> · options</div>
+  <h2>Shape the remote session</h2>
+  <div class="cards">
+    <div class="card" data-hl="addr"><h3>-remote-addr</h3><p>The remote GUI's own address: a different one for each account or server, so sessions never collide.</p></div>
+    <div class="card" data-hl="idle"><h3>-idle-timeout</h3><p>Stops the remote GUI once nobody has used it for that long, with no fit or download running.</p></div>
+    <div class="card" data-hl="sshcfg"><h3 class="plain">Your SSH settings</h3><p>Host aliases, keys, agents and jump hosts work as usual; <b style="color:var(--ink)">-ssh-bin</b> picks the SSH client.</p></div>
+    <div class="card" data-hl="stop"><h3 class="plain">Tied together</h3><p>Close the launcher, or lose the connection, and the remote OFE-GUI stops too.</p></div>
+  </div>
+</section>
+
+<section class="slide" id="connect1">
+  <div class="kicker"><code>onefite-gui -connect-remote</code></div>
+  <h2>Your interface, the remote engine</h2>
+  <div class="net" data-hl="net">
+    <div class="host here">
+      <div class="name">Your computer</div>
+      <div class="box gui">OFE-GUI<small>form · Terminal · files</small></div>
+    </div>
+    <div class="link"><div class="lbl top">fits go through<br>an SSH tunnel</div><div class="pipe"></div></div>
+    <div class="host there">
+      <div class="name">Remote host</div>
+      <div class="box gui">OFE-GUI, started for you<small>runs the fits</small></div>
+    </div>
+  </div>
+  <div class="term" data-hl="cmd" style="font-size:24px"><span class="p">$</span> onefite-gui <span class="hl">-connect-remote ofe@192.168.64.113</span> \
+    -remote-gui=/opt/onefite-go/bin/onefite-gui -remote-onefite=/opt/onefite-go/bin/onefite \
+    -ofe-path=/opt/onefite-go -enable-terminal
+<span class="m">onefite-host-gui: launched a remote onefite-gui on ofe@192.168.64.113, reachable here as http://127.0.0.1:18143
+onefite-host-gui: serving http://127.0.0.1:8143/ (onefite: onefite)</span></div>
+</section>
+
+<section class="slide" id="manual">
+  <div class="kicker">An OFE-GUI already running</div>
+  <h2>Open the tunnel yourself</h2>
+  <div class="sub" style="font-size:34px">For example a server that runs OFE-GUI as a system service, on 127.0.0.1:8143</div>
+  <div class="term" data-hl="tunnel"><span class="p">$</span> ssh -N -L 18143:127.0.0.1:8143 ofe@server</div>
+  <div class="cards" style="margin-top:34px">
+    <div class="card" data-hl="browser"><h3 class="plain">In your browser</h3><p>Open <b style="color:var(--ink)">http://127.0.0.1:18143</b> and use the server's OFE-GUI, as with -ssh.</p></div>
+    <div class="card" data-hl="field"><h3 class="plain">In your own OFE-GUI</h3><p>Settings → <b style="color:var(--ink)">Remote onefite-gui</b>: http://127.0.0.1:18143, as with -connect-remote.</p></div>
+  </div>
+</section>
+
+<section class="slide" id="reverse">
+  <div class="kicker"><code>onefite-gui -reverse-ssh</code></div>
+  <h2>When the fitting machine can't be reached</h2>
+  <div class="net" data-hl="net">
+    <div class="host there">
+      <div class="name">Behind NAT or a firewall</div>
+      <div class="box gui">OFE-GUI<small>127.0.0.1:18143</small></div>
+    </div>
+    <div class="link"><div class="lbl top">it opens the tunnel,<br>outbound</div><div class="pipe"></div></div>
+    <div class="host here">
+      <div class="name">A computer you can reach</div>
+      <div class="box">Browser<small>http://127.0.0.1:8143</small></div>
+    </div>
+  </div>
+  <div class="term" data-hl="cmd" style="font-size:23px"><span class="p">$</span> onefite-gui <span class="hl">-reverse-ssh ofe@192.168.64.113</span> -addr=127.0.0.1:18143 -reverse-addr=127.0.0.1:8143
+<span class="m">onefite-host-gui: reverse forwarding http://127.0.0.1:8143/ on ofe@192.168.64.113 to http://127.0.0.1:18143/
+onefite-host-gui: serving http://127.0.0.1:18143/ (onefite: onefite)</span></div>
+</section>
+
+<section class="slide" id="engine">
+  <div class="kicker">An engine web service</div>
+  <h2>Or point OFE-GUI at an engine</h2>
+  <div class="rows">
+    <div class="k" data-hl="exe">onefite executable</div><div class="v" data-hl="exe_v">an http:// address instead of a program <span>(Settings)</span></div>
+    <div class="k" data-hl="raku">start-web-engine</div><div class="v" data-hl="raku_v">the Raku engine's web service, on the server</div>
+    <div class="k" data-hl="less">smaller</div><div class="v" data-hl="less_v">one data file per fit, fewer options <span>· anything unsupported is reported, never silently dropped</span></div>
+  </div>
+</section>
+
+<section class="slide" id="choose">
+  <div class="kicker">Which one?</div>
+  <h2>Pick by where things should run</h2>
+  <div class="rows">
+    <div class="k" data-hl="ssh">-ssh</div><div class="v" data-hl="ssh_v">everything on the remote host: interface, Terminal, files and fits</div>
+    <div class="k" data-hl="connect">-connect-remote</div><div class="v" data-hl="connect_v">interface, Terminal and files here; fits on the remote host</div>
+    <div class="k" data-hl="tunnel">ssh -L</div><div class="v" data-hl="tunnel_v">an OFE-GUI already running on the server</div>
+    <div class="k" data-hl="reverse">-reverse-ssh</div><div class="v" data-hl="reverse_v">the fitting machine can't accept connections</div>
+    <div class="k" data-hl="engine">http:// engine</div><div class="v" data-hl="engine_v">an engine web service, with a smaller set of options</div>
+  </div>
+  <div class="fine" data-hl="safe" style="margin-top:44px;align-self:flex-start">OFE-GUI always listens on 127.0.0.1, and SSH does the connecting. <b style="color:var(--ink)">-allow-public</b> exists only for an isolated, firewalled machine: there is no login.</div>
+</section>
+
+<section class="slide" id="close">
+  <div class="kicker">OFE-GUI · remote hosts</div>
+  <div class="flow">Your browser <span class="a">→</span> SSH <span class="a">→</span> the fits</div>
+  <div class="bar"><div class="chip"><b>onefite-gui -h</b> lists every option</div><div class="chip"><b>man onefite-gui</b> describes them</div></div>
+  <div class="rule"></div>
+  <div class="fine">Both OFE-Go and OFE-GUI are currently distributed under the Artistic License 2.0.<br>A separate commercial license for eligible project code is in preparation.</div>
+  <div class="badge">PRE-FINAL VERSION</div>
+</section>
+
+<script>
+  const id = new URLSearchParams(location.search).get("s") || "title";
+  document.getElementById(id).classList.add("on");
+</script>
+</body></html>

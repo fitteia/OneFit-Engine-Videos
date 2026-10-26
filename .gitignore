@@ -1,8 +1,9 @@
 *.mp4
 node_modules/
-introduction/build/out/
-introduction/build/voices/
-introduction/build/slides/*.png
-introduction/build/make.log
+kit/voices/
+*/build/out/
+*/build/slides/*.png
+*/build/make.log
+*/build/capture/profile/
 .DS_Store
 __pycache__/

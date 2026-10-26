@@ -1,0 +1,35 @@
+OFE-GUI on remote hosts
+OFE-GUI can run your fits on another computer: a workstation, a lab server, or a virtual machine. Your browser stays on your computer, and the fitting happens over there. This tour starts with the -ssh option, and then shows the alternatives.
+
+Where OFE-GUI runs
+On its own, OFE-GUI runs on your computer and opens in your browser, at 127.0.0.1, port 8143. It has no login, and it can browse files and run fits, so it never listens on the network. To reach another computer, it uses SSH: your account, your keys and your settings.
+
+-ssh
+With -ssh, one command starts OFE-GUI on the remote account and connects your browser to it. Name the remote programs, and the OFE_PATH their engine needs. -remote-dir picks the folder it starts in, and -enable-terminal adds the Terminal. The launcher forwards port 8143 on your computer through SSH, and opens it in your browser.
+
+-ssh in the browser
+Everything on this page now runs on the remote host. The Terminal is a shell on forky, an arm64 server, in the folder we chose. Choose files uploads data from your computer into that folder; Choose on forky picks files already there. The fit runs there too, with the same result: T1 is 1.998, plus or minus 0.030.
+
+-ssh options
+A few options shape the remote session. Give each account or server its own remote address, so that sessions never collide. An idle timeout stops the remote OFE-GUI once nobody has used it for a while. Your SSH configuration applies as usual: host aliases, keys, agents and jump hosts. Close the launcher, or lose the connection, and the remote OFE-GUI stops too.
+
+-connect-remote
+-connect-remote divides the work differently. OFE-GUI runs on your computer, and a second OFE-GUI is started on the remote host, behind an SSH tunnel. The launcher reports both, each on its own address.
+
+-connect-remote in the browser
+In Settings, the Remote onefite-gui field already holds the tunnel's address. The Terminal and the files stay on your computer, here in the fits folder. Only the fit goes to the remote host, and its results come back here. Clear the field, and the next fit runs locally.
+
+An OFE-GUI already running
+If OFE-GUI already runs on the server, for example as a system service, open the tunnel yourself. Then open its address in your browser, as with -ssh, or put it in the Remote onefite-gui field of your own OFE-GUI, as with -connect-remote.
+
+-reverse-ssh
+Sometimes the computer that runs the fits is behind NAT or a firewall, and can't accept connections. With -reverse-ssh, it serves OFE-GUI itself and opens the tunnel outbound, to a computer you can reach. On that computer, open 127.0.0.1, port 8143, in the browser.
+
+An engine web service
+OFE-GUI can also drive an engine web service directly: in Settings, give the onefite executable an http address. That service comes from the Raku engine, started with onefite start-web-engine. Its interface is smaller: one data file per fit and fewer options, and anything unsupported is reported, never silently dropped.
+
+Which one?
+So choose by where things should run. -ssh puts everything on the remote host. -connect-remote keeps the interface here, and sends the fits there. A tunnel reaches an OFE-GUI that is already running. -reverse-ssh works when the fitting machine can't be reached. In every case OFE-GUI listens only on 127.0.0.1, and SSH does the connecting.
+
+Closing
+onefite-gui -h lists every option, and its manual page describes them all. Both OFE-Go and OFE-GUI are currently distributed under the Artistic License 2.0. A separate commercial license for eligible project code is in preparation.

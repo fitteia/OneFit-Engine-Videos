@@ -1,3 +1,11 @@
+NAME = "ofe-go-gui-introduction"
+TITLE = "OFE-Go and OFE-GUI introduction"
+IMAGES = {
+    "title": "slides/title.png", "cli1": "slides/cli1.png", "cli2": "slides/cli2.png",
+    "start": "slides/start.png", "modes": "slides/modes.png", "close": "slides/close.png",
+    "fit": "shots/10-fit-compact.png", "figures": "shots/22-fig-clean.png", "report": "shots/31-report-full.png", "report_top": "shots/30-report.png",
+}
+
 # The v2 script. Each sentence: caption text, spoken text (pronunciation fixes),
 # optional length_scale, and the shot: image, camera (x, y, width in source px;
 # height follows 16:9) and an optional highlight box (x0, y0, x1, y1).

@@ -1,0 +1,8 @@
+{
+  "name": "onefit-engine-videos",
+  "private": true,
+  "description": "Renders the slides and captures the GUI screens of the OneFit Engine videos",
+  "dependencies": {
+    "playwright-core": "1.56.1"
+  }
+}

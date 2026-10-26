@@ -1,0 +1,289 @@
+1
+00:00:00,750 --> 00:00:04,971
+OFE-GUI can run your fits on
+another computer: a workstation,
+
+2
+00:00:04,971 --> 00:00:07,742
+a lab server, or a virtual machine.
+
+3
+00:00:07,892 --> 00:00:11,905
+Your browser stays on your computer,
+and the fitting happens over there.
+
+4
+00:00:12,055 --> 00:00:17,394
+This tour starts with the -ssh option,
+and then shows the alternatives.
+
+5
+00:00:18,894 --> 00:00:20,150
+On its own,
+
+6
+00:00:20,150 --> 00:00:26,541
+OFE-GUI runs on your computer
+and opens in your browser,
+
+7
+00:00:26,541 --> 00:00:29,631
+at 127.0.0.1, port 8143.
+
+8
+00:00:29,781 --> 00:00:33,237
+It has no login, and it can
+browse files and run fits,
+
+9
+00:00:33,237 --> 00:00:35,828
+so it never listens on the network.
+
+10
+00:00:35,978 --> 00:00:42,284
+To reach another computer, it uses SSH:
+your account, your keys and your settings.
+
+11
+00:00:43,784 --> 00:00:44,500
+With -ssh,
+
+12
+00:00:44,500 --> 00:00:50,648
+one command starts OFE-GUI on the remote
+account and connects your browser to it.
+
+13
+00:00:50,798 --> 00:00:55,299
+Name the remote programs, and
+the OFE_PATH their engine needs.
+
+14
+00:00:55,449 --> 00:01:00,820
+-remote-dir picks the folder it starts in,
+and -enable-terminal adds the Terminal.
+
+15
+00:01:00,970 --> 00:01:05,676
+The launcher forwards port 8143
+on your computer through SSH,
+
+16
+00:01:05,676 --> 00:01:08,263
+and opens it in your browser.
+
+17
+00:01:09,763 --> 00:01:12,934
+Everything on this page now
+runs on the remote host.
+
+18
+00:01:13,084 --> 00:01:18,598
+The Terminal is a shell on forky, an
+arm64 server, in the folder we chose.
+
+19
+00:01:18,748 --> 00:01:22,657
+Choose files uploads data from
+your computer into that folder;
+
+20
+00:01:22,657 --> 00:01:25,655
+Choose on forky picks files already there.
+
+21
+00:01:25,805 --> 00:01:34,378
+The fit runs there too, with the same
+result: T1 is 1.998, plus or minus 0.030.
+
+22
+00:01:35,878 --> 00:01:38,304
+A few options shape the remote session.
+
+23
+00:01:38,454 --> 00:01:43,820
+Give each account or server its own remote
+address, so that sessions never collide.
+
+24
+00:01:43,970 --> 00:01:49,394
+An idle timeout stops the remote OFE-GUI
+once nobody has used it for a while.
+
+25
+00:01:49,544 --> 00:01:56,476
+Your SSH configuration applies as usual:
+host aliases, keys, agents and jump hosts.
+
+26
+00:01:56,626 --> 00:01:59,286
+Close the launcher, or
+lose the connection,
+
+27
+00:01:59,286 --> 00:02:01,678
+and the remote OFE-GUI stops too.
+
+28
+00:02:03,178 --> 00:02:05,955
+-connect-remote divides
+the work differently.
+
+29
+00:02:06,105 --> 00:02:08,462
+OFE-GUI runs on your computer,
+
+30
+00:02:08,462 --> 00:02:12,469
+and a second OFE-GUI is
+started on the remote host,
+
+31
+00:02:12,469 --> 00:02:14,469
+behind an SSH tunnel.
+
+32
+00:02:14,619 --> 00:02:18,308
+The launcher reports both,
+each on its own address.
+
+33
+00:02:19,808 --> 00:02:24,072
+In Settings, the Remote onefite-gui
+field already holds the tunnel's address.
+
+34
+00:02:24,222 --> 00:02:28,674
+The Terminal and the files stay on
+your computer, here in the fits folder.
+
+35
+00:02:28,824 --> 00:02:32,811
+Only the fit goes to the remote
+host, and its results come back here.
+
+36
+00:02:32,961 --> 00:02:36,256
+Clear the field, and the
+next fit runs locally.
+
+37
+00:02:37,756 --> 00:02:40,346
+If OFE-GUI already runs on the server,
+
+38
+00:02:40,346 --> 00:02:44,648
+for example as a system service,
+open the tunnel yourself.
+
+39
+00:02:44,798 --> 00:02:49,379
+Then open its address in
+your browser, as with -ssh,
+
+40
+00:02:49,529 --> 00:02:53,219
+or put it in the Remote onefite-gui
+field of your own OFE-GUI,
+
+41
+00:02:53,219 --> 00:02:54,998
+as with -connect-remote.
+
+42
+00:02:56,498 --> 00:03:01,391
+Sometimes the computer that runs the
+fits is behind NAT or a firewall,
+
+43
+00:03:01,391 --> 00:03:03,768
+and can't accept connections.
+
+44
+00:03:03,918 --> 00:03:05,293
+With -reverse-ssh,
+
+45
+00:03:05,293 --> 00:03:09,496
+it serves OFE-GUI itself and
+opens the tunnel outbound,
+
+46
+00:03:09,496 --> 00:03:11,986
+to a computer you can reach.
+
+47
+00:03:12,136 --> 00:03:19,520
+On that computer, open 127.0.0.1,
+port 8143, in the browser.
+
+48
+00:03:21,020 --> 00:03:24,937
+OFE-GUI can also drive an
+engine web service directly:
+
+49
+00:03:24,937 --> 00:03:29,421
+in Settings, give the onefite
+executable an http address.
+
+50
+00:03:29,571 --> 00:03:34,608
+That service comes from the Raku engine,
+started with onefite start-web-engine.
+
+51
+00:03:34,758 --> 00:03:36,556
+Its interface is smaller:
+
+52
+00:03:36,556 --> 00:03:39,434
+one data file per fit and fewer options,
+
+53
+00:03:39,434 --> 00:03:44,172
+and anything unsupported is
+reported, never silently dropped.
+
+54
+00:03:45,672 --> 00:03:48,044
+So choose by where things should run.
+
+55
+00:03:48,194 --> 00:03:51,532
+-ssh puts everything on the remote host.
+
+56
+00:03:51,682 --> 00:03:55,903
+-connect-remote keeps the interface
+here, and sends the fits there.
+
+57
+00:03:56,053 --> 00:03:59,674
+A tunnel reaches an OFE-GUI
+that is already running.
+
+58
+00:03:59,824 --> 00:04:04,009
+-reverse-ssh works when the
+fitting machine can't be reached.
+
+59
+00:04:04,159 --> 00:04:10,861
+In every case OFE-GUI listens only on
+127.0.0.1, and SSH does the connecting.
+
+60
+00:04:12,361 --> 00:04:17,035
+onefite-gui -h lists every option, and
+its manual page describes them all.
+
+61
+00:04:17,185 --> 00:04:23,990
+Both OFE-Go and OFE-GUI are currently
+distributed under the Artistic License 2.0.
+
+62
+00:04:24,140 --> 00:04:28,975
+A separate commercial license for
+eligible project code is in preparation.
