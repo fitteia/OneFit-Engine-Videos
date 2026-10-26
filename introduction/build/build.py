@@ -19,20 +19,40 @@ IMAGES = {
 only = set(sys.argv[1:])
 
 # --- narration -------------------------------------------------------------
+def voiced(cap, say, ls):
+    return [say or cap, ls or BASE_LS]
+
+# Each sentence's audio; with REUSE_AUDIO, a sentence whose spoken text and
+# pace are unchanged keeps its audio from the previous build (out/), so a
+# change re-voices only the sentences that changed.
 def synth():
-    from piper import PiperVoice, SynthesisConfig
-    v = PiperVoice.load(VOICE)
-    sr = v.config.sample_rate
-    clips = []
+    keep, sr = {}, None
+    if os.environ.get("REUSE_AUDIO"):
+        tl = json.load(open(os.path.join(OUT, "timeline.json")))
+        with wave.open(os.path.join(OUT, "narration-raw.wav")) as w:
+            sr = w.getframerate()
+            raw = np.frombuffer(w.readframes(w.getnframes()), np.int16).astype(np.float32) / 32767
+        spans = [ab for s_ in tl["sections"] for ab in s_["sents"]]
+        for key, (a, b) in zip(tl.get("voiced", []), spans):
+            keep[json.dumps(key)] = raw[int(a * sr):int(a * sr) + int(round((b - a) * sr))]
+    v, clips, fresh = None, [], 0
     for si, sec in enumerate(SECTIONS):
         for ji, (cap, say, ls, *_ ) in enumerate(sec["sentences"]):
+            key = json.dumps(voiced(cap, say, ls))
+            if key in keep:
+                clips.append(keep[key]); continue
+            if v is None:
+                from piper import PiperVoice, SynthesisConfig
+                v = PiperVoice.load(VOICE)
+                if sr is None: sr = v.config.sample_rate
             cfg = SynthesisConfig(length_scale=ls or BASE_LS, noise_scale=NOISE, noise_w_scale=NOISE_W)
             x = np.concatenate([c.audio_float_array for c in v.synthesize(say or cap, cfg)])
             env = np.convolve(np.abs(x), np.ones(220) / 220, "same")
             on = np.where(env > 10 ** (-42 / 20))[0]
             pad = int(0.03 * sr)
             x = x[max(on[0] - pad, 0): on[-1] + pad]
-            clips.append(x)
+            clips.append(x); fresh += 1
+    print("voiced %d sentence(s), reused %d" % (fresh, len(clips) - fresh))
     return sr, clips
 
 def timeline(clips, sr):
@@ -201,12 +221,6 @@ def render_section(si, tl, imgs, t):
     return frame
 
 def main():
-    if os.environ.get("REUSE_AUDIO"):
-        tl = json.load(open(os.path.join(OUT, "timeline.json")))
-        secs, total = tl["sections"], tl["total"]
-        print("reusing out/narration-raw.wav, out/captions.srt and out/timeline.json (%.1fs)" % total)
-        render(secs, total)
-        return
     sr, clips = synth()
     secs, total = timeline(clips, sr)
     audio = np.zeros(int(total * sr) + sr, np.float32); k = 0
@@ -218,7 +232,7 @@ def main():
         w.writeframes((audio.clip(-1, 1) * 32767).astype(np.int16).tobytes())
     srt, cues = captions(secs)
     open(os.path.join(OUT, "captions.srt"), "w").write(srt)
-    json.dump({"total": total, "sections": secs}, open(os.path.join(OUT, "timeline.json"), "w"), indent=1)
+    json.dump({"total": total, "sections": secs, "voiced": [voiced(*x[:3]) for sec in SECTIONS for x in sec["sentences"]]}, open(os.path.join(OUT, "timeline.json"), "w"), indent=1)
     print("total %.1fs, %d cues, longest cue %.1fs" % (total, len(cues), max(b - a for a, b, _ in cues)))
     if "audio" in only: return
     render(secs, total)

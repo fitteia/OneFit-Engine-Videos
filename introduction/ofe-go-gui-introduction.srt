@@ -131,81 +131,81 @@ You can also start an optional,
 separately installed AI assistant there.
 
 30
-00:01:49,924 --> 00:01:54,305
-On the right, the fitted curve follows
-the data across the whole decay.
+00:01:49,924 --> 00:01:54,824
+Below it, in Plots, the fitted curve
+follows the data across the whole decay.
 
 31
-00:01:55,805 --> 00:02:00,189
+00:01:56,324 --> 00:02:00,708
 In OFE-Figures, the fit plot
 becomes a publication figure.
 
 32
-00:02:00,339 --> 00:02:04,104
+00:02:00,858 --> 00:02:04,623
 I added a title, and a
 subtitle with the fitted T1.
 
 33
-00:02:04,254 --> 00:02:07,724
+00:02:04,773 --> 00:02:08,243
 The axis labels use a
 Greek tau and a subscript.
 
 34
-00:02:07,874 --> 00:02:15,297
+00:02:08,393 --> 00:02:15,816
 plot-go draws it, and exports
 PDF, EPS, SVG, PNG or TIFF.
 
 35
-00:02:16,797 --> 00:02:20,595
+00:02:17,316 --> 00:02:21,114
 OFE-Report turns the
 finished run into a report.
 
 36
-00:02:20,745 --> 00:02:24,143
+00:02:21,264 --> 00:02:24,662
 It records the engine, the
 exact command and the model,
 
 37
-00:02:24,143 --> 00:02:27,952
+00:02:24,662 --> 00:02:28,471
 and checks every result file
 against the run's manifest.
 
 38
-00:02:28,102 --> 00:02:36,170
+00:02:28,621 --> 00:02:36,689
 Results are rounded for publication:
 T1 is 1.998, plus or minus 0.030.
 
 39
-00:02:36,320 --> 00:02:38,817
+00:02:36,839 --> 00:02:39,336
 The edited figure is included.
 
 40
-00:02:38,967 --> 00:02:45,010
+00:02:39,486 --> 00:02:45,529
 Save it, print it, or download it
 as PDF, Word, Excel or Markdown.
 
 41
-00:02:46,510 --> 00:02:50,482
+00:02:47,029 --> 00:02:51,001
 Prepare, fit, inspect, and communicate.
 
 42
-00:02:50,632 --> 00:02:53,016
+00:02:51,151 --> 00:02:53,535
 Use OFE-GUI on your own computer,
 
 43
-00:02:53,016 --> 00:02:55,689
+00:02:53,535 --> 00:02:56,208
 or connect it to a remote Linux host,
 
 44
-00:02:55,689 --> 00:02:59,073
+00:02:56,208 --> 00:02:59,592
 and use OFE-Go for scripts and automation.
 
 45
-00:02:59,223 --> 00:03:05,949
+00:02:59,742 --> 00:03:06,468
 Both OFE-Go and OFE-GUI are currently
 distributed under the Artistic License 2.0.
 
 46
-00:03:06,099 --> 00:03:10,669
+00:03:06,618 --> 00:03:11,188
 A separate commercial license for
 eligible project code is in preparation.

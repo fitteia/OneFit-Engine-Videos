@@ -1,12 +1,12 @@
 # OFE-Go and OFE-GUI introduction
 
-[`ofe-go-gui-introduction.mp4`](https://github.com/fitteia/OneFit-Engine-Videos/releases/latest/download/ofe-go-gui-introduction.mp4) is a 3 minute 11 second, 1920×1080 introduction with English narration and an embedded English subtitle track (soft subtitles; turn them on in the player). [`ofe-go-gui-introduction.srt`](ofe-go-gui-introduction.srt) holds the same subtitles as a separate file, and [`ofe-go-gui-introduction-script.txt`](ofe-go-gui-introduction-script.txt) holds the full script.
+[`ofe-go-gui-introduction.mp4`](https://github.com/fitteia/OneFit-Engine-Videos/releases/latest/download/ofe-go-gui-introduction.mp4) is a 3 minute 12 second, 1920×1080 introduction with English narration and an embedded English subtitle track (soft subtitles; turn them on in the player). [`ofe-go-gui-introduction.srt`](ofe-go-gui-introduction.srt) holds the same subtitles as a separate file, and [`ofe-go-gui-introduction-script.txt`](ofe-go-gui-introduction-script.txt) holds the full script.
 
 The video follows one real measurement, a field-cycling NMR relaxation curve (20 points), from the data to the report:
 
 - OFE-Go: the fit as one command, with its real output. The model `Mz(t,M0:1,Minf:0.05,T1:2[0.01<100])=Minf+(M0-Minf)*exp(-t/T1)` is fitted with `--logx --reduced-chi2 --fit-methods="simp scan min"`, giving T1 = 1.998 ± 0.030.
 - The two ways to start a fit (data plus model, or a saved JSON/SAV fit, with jobs files for batches) and the Individual, Global and Hybrid modes.
-- OFE-GUI: the same fit, run with OFE-GUI 0.4.0-pre23 and onefite-go 0.4.0~pre8, shown in the dark Compact layout with the Terminal above Plots in the centre column.
+- OFE-GUI: the same fit, run with OFE-GUI 0.4.0-pre24 and onefite-go 0.4.0~pre8, shown in the dark Compact layout with Plots below the Terminal in the centre column (the report scene was captured with 0.4.0-pre23).
 - OFE-Figures: the fit plot with an edited title, subtitle and axis labels, drawn by `plot-go`.
 - OFE-Report: the report of that run, rounded for publication, with the edited figure.
 
@@ -25,11 +25,11 @@ npm install
 ./make.sh
 ```
 
-`make.sh` renders the slides, synthesizes the narration sentence by sentence (`narration.py` holds each sentence's caption text, spoken text, camera framing and highlight), renders the frames (`build.py`), normalizes the narration to −16 LUFS with a −1.5 dBTP ceiling, and writes `../ofe-go-gui-introduction.mp4` with its embedded subtitles, plus the `.srt` and the script. Piper's synthesis varies slightly from run to run, so each build's timings, and with them its subtitles, are its own: release the MP4 together with the `.srt` from the same build. To change only the picture (slides, framing, highlights), run `REUSE_AUDIO=1 ./make.sh`: it keeps the narration, subtitles and timing that the previous build left in `build/out/`.
+`make.sh` renders the slides, synthesizes the narration sentence by sentence (`narration.py` holds each sentence's caption text, spoken text, camera framing and highlight), renders the frames (`build.py`), normalizes the narration to −16 LUFS with a −1.5 dBTP ceiling, and writes `../ofe-go-gui-introduction.mp4` with its embedded subtitles, plus the `.srt` and the script. Piper's synthesis varies slightly from run to run, so each build's timings, and with them its subtitles, are its own: release the MP4 together with the `.srt` from the same build. To keep the voice of an existing build, run `REUSE_AUDIO=1 ./make.sh`: every sentence whose spoken text and pace are unchanged keeps its audio from the previous build in `build/out/`, and only changed sentences are voiced again. With no change to the narration, the narration and subtitles come out identical.
 
 The camera is continuous: sentences with the same picture and framing share one slow push-in (at most 3%), a new framing glides there from wherever the camera is (longer for bigger moves, zooming at an even pace), and a new picture crossfades in.
 
-`build/shots/` holds the four GUI screens the video uses, captured at 3840×2160 from a real run. `build/capture/` holds the Playwright scripts that captured them; they drive a running OFE-GUI and contain that session's paths and job IDs, so adjust them before capturing again.
+`build/shots/` holds the four GUI screens the video uses, captured at 3840×2160 from a real run. `build/capture/` holds the Playwright scripts that captured them. `fit-scene.cjs` captures the Fit scene by itself (a fresh work folder, the pane layout, the fit and the terminal commands; see its header for GUI, DATA and PROFILE); the others drive a running OFE-GUI and contain that session's paths and job IDs, so adjust them before capturing again.
 
 ## Voice credit
 

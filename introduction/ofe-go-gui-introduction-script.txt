@@ -11,7 +11,7 @@ Choose a fitting mode
 Then choose how the parameters are shared. Individual fits each data set on its own. Global shares parameters across all the data sets. Hybrid shares the ones you choose, and fits the rest per data set.
 
 OFE-GUI · Fit
-OFE-GUI runs the same fit in the browser. On the left are the model expression and the data file. The options map directly to command-line flags: here, a logarithmic time axis and reduced chi-square. In the centre, the Terminal is an ordinary shell on the machine that runs the fits. You can also start an optional, separately installed AI assistant there. On the right, the fitted curve follows the data across the whole decay.
+OFE-GUI runs the same fit in the browser. On the left are the model expression and the data file. The options map directly to command-line flags: here, a logarithmic time axis and reduced chi-square. In the centre, the Terminal is an ordinary shell on the machine that runs the fits. You can also start an optional, separately installed AI assistant there. Below it, in Plots, the fitted curve follows the data across the whole decay.
 
 OFE-Figures
 In OFE-Figures, the fit plot becomes a publication figure. I added a title, and a subtitle with the fitted T1. The axis labels use a Greek tau and a subscript. plot-go draws it, and exports PDF, EPS, SVG, PNG or TIFF.

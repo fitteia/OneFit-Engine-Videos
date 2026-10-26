@@ -6,7 +6,7 @@ The MP4 files are **release assets**, not files in this repository, so that clon
 
 | Video | Length | Download | Captions and script |
 | --- | --- | --- | --- |
-| OFE-Go and OFE-GUI introduction (pre-final) | 3:11 | [ofe-go-gui-introduction.mp4](https://github.com/fitteia/OneFit-Engine-Videos/releases/latest/download/ofe-go-gui-introduction.mp4) | [captions](introduction/ofe-go-gui-introduction.srt), [script](introduction/ofe-go-gui-introduction-script.txt), [about](introduction/README.md) |
+| OFE-Go and OFE-GUI introduction (pre-final) | 3:12 | [ofe-go-gui-introduction.mp4](https://github.com/fitteia/OneFit-Engine-Videos/releases/latest/download/ofe-go-gui-introduction.mp4) | [captions](introduction/ofe-go-gui-introduction.srt), [script](introduction/ofe-go-gui-introduction-script.txt), [about](introduction/README.md) |
 
 Every MP4 also has its subtitles as an embedded track; turn them on in the player.
 
