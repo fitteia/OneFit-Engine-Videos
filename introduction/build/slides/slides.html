@@ -1,0 +1,101 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>slides</title>
+<style>
+  :root { --bg:#0f1418; --panel:#161d23; --ink:#e4edf5; --dim:#8fa3b5; --teal:#2cc4b5; --orange:#f2a64f; --blue:#4a9be0; }
+  html,body { margin:0; width:1920px; height:1080px; background:var(--bg); color:var(--ink); font-family:"Liberation Sans","DejaVu Sans",sans-serif; overflow:hidden; }
+  .slide { position:absolute; inset:0; display:none; padding:110px 140px; box-sizing:border-box;
+    background: radial-gradient(1200px 700px at 85% 15%, rgba(44,196,181,.10), transparent 60%), radial-gradient(900px 600px at 10% 95%, rgba(242,166,79,.08), transparent 60%), var(--bg); }
+  .slide.on { display:flex; flex-direction:column; justify-content:center; }
+  .kicker { font-size:30px; letter-spacing:.18em; text-transform:uppercase; color:var(--teal); font-weight:700; }
+  h1 { font-size:96px; margin:24px 0 18px; line-height:1.05; }
+  h2 { font-size:72px; margin:20px 0 26px; line-height:1.1; }
+  .sub { font-size:40px; color:var(--dim); line-height:1.35; max-width:1500px; }
+  .brand { display:flex; align-items:center; gap:36px; }
+  .brand img { width:190px; }
+  .rule { height:6px; width:180px; background:linear-gradient(90deg,var(--teal),var(--orange)); border-radius:3px; margin:34px 0; }
+  .term { margin-top:30px; background:#05080a; border:2px solid #26313a; border-radius:18px; padding:34px 40px; font-family:"DejaVu Sans Mono","Liberation Mono",monospace; font-size:27px; line-height:1.5; white-space:pre; color:#d6e2ec; box-shadow:0 30px 80px rgba(0,0,0,.5); }
+  .p { color:#5fd38d; font-weight:700; } .c { color:var(--ink); } .hl { color:var(--orange); font-weight:700; } .m { color:var(--dim); }
+  .bar { align-self:flex-start; display:flex; gap:22px; flex-wrap:wrap; margin-top:20px; }
+  .chip { background:var(--panel); border:2px solid #26313a; border-radius:14px; padding:20px 30px; font-size:34px; }
+  .chip b { color:var(--teal); }
+  .cards { display:grid; grid-template-columns:repeat(3,1fr); gap:40px; margin-top:60px; }
+  .card { background:var(--panel); border:2px solid #26313a; border-radius:22px; padding:44px 40px; min-height:360px; box-sizing:border-box; }
+  .card h3 { font-size:48px; margin:0 0 22px; }
+  .card p { font-size:32px; color:var(--dim); line-height:1.4; margin:0; }
+  .card svg { display:block; margin:0 0 28px; }
+  .flow { display:flex; align-items:center; gap:28px; margin:10px 0 60px; font-size:50px; font-weight:700; }
+  .flow span.a { color:var(--dim); font-weight:400; }
+  .fine { font-size:31px; color:var(--dim); line-height:1.5; max-width:1600px; }
+  .badge { align-self:flex-start; display:inline-block; margin-top:46px; padding:14px 30px; border:3px solid var(--orange); color:var(--orange); border-radius:12px; font-size:30px; font-weight:700; letter-spacing:.2em; }
+</style></head>
+<body>
+
+<section class="slide" id="title">
+  <div class="brand"><img src="logo-dark.svg" alt=""><div>
+    <div class="kicker">OneFit Engine</div>
+    <h1>Fit models to data</h1>
+    <div class="sub">from the command line with OFE-Go,<br>or in the browser with OFE-GUI</div>
+  </div></div>
+  <div class="rule" style="margin-left:226px"></div>
+  <div class="sub" style="margin-left:226px;font-size:32px">One real measurement, from data to report</div>
+</section>
+
+<section class="slide" id="cli1">
+  <div class="kicker">OFE-Go · command line</div>
+  <h2>A fit is one command</h2>
+  <div class="term"><span class="p">$</span> <span class="c">onefite fit --logx --reduced-chi2 --fit-methods="simp scan min" \
+    "Mz(t,M0:1,Minf:0.05,<span class="hl">T1:2[0.01&lt;100]</span>)=Minf+(M0-Minf)*exp(-t/T1)" \
+    ffc-relaxation.dat</span>
+</div>
+  <div class="bar" style="margin-top:44px"><div class="chip"><b>model</b> with start values and limits</div><div class="chip"><b>data</b> field-cycling NMR, 20 points</div></div>
+</section>
+
+<section class="slide" id="cli2">
+  <div class="kicker">OFE-Go · command line</div>
+  <h2>A fit is one command</h2>
+  <div class="term"><span class="p">$</span> <span class="c">onefite fit --logx --reduced-chi2 --fit-methods="simp scan min" \
+    "Mz(t,M0:1,Minf:0.05,T1:2[0.01&lt;100])=Minf+(M0-Minf)*exp(-t/T1)" \
+    ffc-relaxation.dat</span>
+<span class="m">===> C code extracted compiled OK!</span>
+
+<span class="m">------------------ fit with χ² ~ Num. degrees freedom ------------------</span>
+# TAG, Npts, chi2, dum_1, dum_2, M0, ±err, Minf, ±err, T1, ±err
+ffc-relaxation, 20, 17, 1, 1, 1.11925, 0.00522219, 0.0407131, 0.0045323, <span class="hl">1.99797, 0.0302714</span>
+<span class="m">------------------ tchi2 = 0.00114341, tnpts = 20, nfps = 3 ------------------</span></div>
+  <div class="bar" style="margin-top:44px"><div class="chip"><b>also</b> create · plot · convert · archive · doctor</div><div class="chip"><b>packages</b> for Linux distributions and Homebrew</div></div>
+</section>
+
+<section class="slide" id="start">
+  <div class="kicker">Two ways to start a fit</div>
+  <h2>Bring a model, or a saved fit</h2>
+  <div class="cards" style="grid-template-columns:repeat(3,1fr)">
+    <div class="card"><h3>Data + model</h3><p>A model expression and one or more data files, as in the command we just ran.</p></div>
+    <div class="card"><h3>JSON / SAV</h3><p>A saved fit description: the model, its parameters and the fit options.</p></div>
+    <div class="card"><h3>Jobs</h3><p>Many fit descriptions run as one batch, side by side.</p></div>
+  </div>
+</section>
+
+<section class="slide" id="modes">
+  <div class="kicker">Choose a fitting mode</div>
+  <h2>How parameters are shared</h2>
+  <div class="cards">
+    <div class="card"><svg width="220" height="90"><g fill="none" stroke-width="8" stroke-linecap="round"><path d="M10 70 Q60 10 100 40" stroke="#2cc4b5"/><path d="M120 70 Q170 10 210 40" stroke="#f2a64f"/></g></svg><h3>Individual</h3><p>Each data set is fitted on its own.</p></div>
+    <div class="card"><svg width="220" height="90"><g fill="none" stroke-width="8" stroke-linecap="round"><path d="M10 75 Q110 -5 210 50" stroke="#2cc4b5"/><path d="M10 85 Q110 15 210 70" stroke="#2cc4b5" opacity=".55"/></g></svg><h3>Global</h3><p>Shared parameters across all the data sets.</p></div>
+    <div class="card"><svg width="220" height="90"><g fill="none" stroke-width="8" stroke-linecap="round"><path d="M10 75 Q110 -5 210 50" stroke="#2cc4b5"/><path d="M10 85 Q110 25 210 75" stroke="#f2a64f"/></g></svg><h3>Hybrid</h3><p>Share the ones you choose; fit the rest per data set.</p></div>
+  </div>
+</section>
+
+<section class="slide" id="close">
+  <div class="kicker">A connected workflow</div>
+  <div class="flow">Prepare <span class="a">→</span> fit <span class="a">→</span> inspect <span class="a">→</span> communicate</div>
+  <div class="bar"><div class="chip"><b>OFE-GUI</b> on your computer, or connected to a remote Linux host</div><div class="chip"><b>OFE-Go</b> for scripts and automation</div></div>
+  <div class="rule"></div>
+  <div class="fine">Both OFE-Go and OFE-GUI are currently distributed under the Artistic License 2.0.<br>A separate commercial license for eligible project code is in preparation.</div>
+  <div class="badge">PRE-FINAL VERSION</div>
+</section>
+
+<script>
+  const id = new URLSearchParams(location.search).get("s") || "title";
+  document.getElementById(id).classList.add("on");
+</script>
+</body></html>

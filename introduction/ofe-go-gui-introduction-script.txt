@@ -1,0 +1,23 @@
+OneFit Engine
+OneFit Engine fits models to experimental data. It comes in two parts that work together: OFE-Go, the command line, and OFE-GUI, an interface in your web browser. Here is a short tour, following one real measurement from the data to the report.
+
+OFE-Go · command line
+With OFE-Go, a fit is a single command. You give it a model expression, with starting values and limits, and a data file: here, a field-cycling NMR relaxation curve. The engine compiles the model, minimises chi-square, and prints every parameter with its error. T1 comes out at 2.00, plus or minus 0.03. The same command line also creates engine files, plots and converts data, archives work, and checks the installation with doctor.
+
+Two ways to start a fit
+There are two ways to start a fit. Give it a model expression and data files, as we just did, or load a saved fit description in JSON or SAV format. A jobs file runs many fit descriptions as one batch.
+
+Choose a fitting mode
+Then choose how the parameters are shared. Individual fits each data set on its own. Global shares parameters across all the data sets. Hybrid shares the ones you choose, and fits the rest per data set.
+
+OFE-GUI · Fit
+OFE-GUI runs the same fit in the browser. On the left are the model expression and the data file. The options map directly to command-line flags: here, a logarithmic time axis and reduced chi-square. In the centre, the Terminal is an ordinary shell on the machine that runs the fits. You can also start an optional, separately installed AI assistant there. On the right, the fitted curve follows the data across the whole decay.
+
+OFE-Figures
+In OFE-Figures, the fit plot becomes a publication figure. I added a title, and a subtitle with the fitted T1. The axis labels use a Greek tau and a subscript. plot-go draws it, and exports PDF, EPS, SVG, PNG or TIFF.
+
+OFE-Report
+OFE-Report turns the finished run into a report. It records the engine, the exact command and the model, and checks every result file against the run's manifest. Results are rounded for publication: T1 is 1.998, plus or minus 0.030. The edited figure is included. Save it, print it, or download it as PDF, Word, Excel or Markdown.
+
+A connected workflow
+Prepare, fit, inspect, and communicate. Use OFE-GUI on your own computer, or connect it to a remote Linux host, and use OFE-Go for scripts and automation. Both OFE-Go and OFE-GUI are currently distributed under the Artistic License 2.0. A separate commercial license for eligible project code is in preparation.

@@ -1,0 +1,8 @@
+*.mp4
+node_modules/
+introduction/build/out/
+introduction/build/voices/
+introduction/build/slides/*.png
+introduction/build/make.log
+.DS_Store
+__pycache__/

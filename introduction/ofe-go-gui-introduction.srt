@@ -1,0 +1,211 @@
+1
+00:00:00,750 --> 00:00:04,190
+OneFit Engine fits models
+to experimental data.
+
+2
+00:00:04,340 --> 00:00:07,961
+It comes in two parts that
+work together: OFE-Go,
+
+3
+00:00:07,961 --> 00:00:10,177
+the command line, and OFE-GUI,
+
+4
+00:00:10,177 --> 00:00:12,965
+an interface in your web browser.
+
+5
+00:00:13,115 --> 00:00:17,847
+Here is a short tour, following one real
+measurement from the data to the report.
+
+6
+00:00:19,347 --> 00:00:22,967
+With OFE-Go, a fit is a single command.
+
+7
+00:00:23,117 --> 00:00:25,311
+You give it a model expression,
+
+8
+00:00:25,311 --> 00:00:29,203
+with starting values and
+limits, and a data file: here,
+
+9
+00:00:29,203 --> 00:00:32,172
+a field-cycling NMR relaxation curve.
+
+10
+00:00:32,322 --> 00:00:35,432
+The engine compiles the
+model, minimises chi-square,
+
+11
+00:00:35,432 --> 00:00:38,295
+and prints every parameter with its error.
+
+12
+00:00:38,445 --> 00:00:44,521
+T1 comes out at 2.00, plus or minus 0.03.
+
+13
+00:00:44,671 --> 00:00:47,568
+The same command line
+also creates engine files,
+
+14
+00:00:47,568 --> 00:00:49,921
+plots and converts data, archives work,
+
+15
+00:00:49,921 --> 00:00:52,685
+and checks the installation with doctor.
+
+16
+00:00:54,185 --> 00:00:56,303
+There are two ways to start a fit.
+
+17
+00:00:56,453 --> 00:01:00,509
+Give it a model expression and
+data files, as we just did,
+
+18
+00:01:00,509 --> 00:01:04,636
+or load a saved fit description
+in JSON or SAV format.
+
+19
+00:01:04,786 --> 00:01:08,904
+A jobs file runs many fit
+descriptions as one batch.
+
+20
+00:01:10,404 --> 00:01:13,051
+Then choose how the parameters are shared.
+
+21
+00:01:13,201 --> 00:01:16,496
+Individual fits each data set on its own.
+
+22
+00:01:16,646 --> 00:01:19,995
+Global shares parameters
+across all the data sets.
+
+23
+00:01:20,145 --> 00:01:24,584
+Hybrid shares the ones you choose,
+and fits the rest per data set.
+
+24
+00:01:26,084 --> 00:01:29,508
+OFE-GUI runs the same fit in the browser.
+
+25
+00:01:29,658 --> 00:01:32,997
+On the left are the model
+expression and the data file.
+
+26
+00:01:33,147 --> 00:01:36,678
+The options map directly to
+command-line flags: here,
+
+27
+00:01:36,678 --> 00:01:40,160
+a logarithmic time axis
+and reduced chi-square.
+
+28
+00:01:40,310 --> 00:01:45,134
+In the centre, the Terminal is an ordinary
+shell on the machine that runs the fits.
+
+29
+00:01:45,284 --> 00:01:49,774
+You can also start an optional,
+separately installed AI assistant there.
+
+30
+00:01:49,924 --> 00:01:54,305
+On the right, the fitted curve follows
+the data across the whole decay.
+
+31
+00:01:55,805 --> 00:02:00,189
+In OFE-Figures, the fit plot
+becomes a publication figure.
+
+32
+00:02:00,339 --> 00:02:04,104
+I added a title, and a
+subtitle with the fitted T1.
+
+33
+00:02:04,254 --> 00:02:07,724
+The axis labels use a
+Greek tau and a subscript.
+
+34
+00:02:07,874 --> 00:02:15,297
+plot-go draws it, and exports
+PDF, EPS, SVG, PNG or TIFF.
+
+35
+00:02:16,797 --> 00:02:20,595
+OFE-Report turns the
+finished run into a report.
+
+36
+00:02:20,745 --> 00:02:24,143
+It records the engine, the
+exact command and the model,
+
+37
+00:02:24,143 --> 00:02:27,952
+and checks every result file
+against the run's manifest.
+
+38
+00:02:28,102 --> 00:02:36,170
+Results are rounded for publication:
+T1 is 1.998, plus or minus 0.030.
+
+39
+00:02:36,320 --> 00:02:38,817
+The edited figure is included.
+
+40
+00:02:38,967 --> 00:02:45,010
+Save it, print it, or download it
+as PDF, Word, Excel or Markdown.
+
+41
+00:02:46,510 --> 00:02:50,482
+Prepare, fit, inspect, and communicate.
+
+42
+00:02:50,632 --> 00:02:53,016
+Use OFE-GUI on your own computer,
+
+43
+00:02:53,016 --> 00:02:55,689
+or connect it to a remote Linux host,
+
+44
+00:02:55,689 --> 00:02:59,073
+and use OFE-Go for scripts and automation.
+
+45
+00:02:59,223 --> 00:03:05,949
+Both OFE-Go and OFE-GUI are currently
+distributed under the Artistic License 2.0.
+
+46
+00:03:06,099 --> 00:03:10,669
+A separate commercial license for
+eligible project code is in preparation.
