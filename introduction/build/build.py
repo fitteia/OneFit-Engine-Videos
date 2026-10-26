@@ -112,44 +112,69 @@ def cam_rect(img, cam):
 
 FONT = ImageFont.truetype("/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf", 30)
 
+# The camera is continuous: consecutive sentences with the same picture and
+# framing form one shot that keeps a slow push-in, a new framing glides there
+# from wherever the camera is, and a new picture crossfades in. Nothing jumps.
+DRIFT_RATE, DRIFT_MAX, GLIDE, PICTURE_XF, LEAD_IN = 0.0022, 0.03, 1.5, 0.6, 0.4
+
+def shots(si, tl, imgs):
+    S = SECTIONS[si]["sentences"]; out = []
+    for j, (a, b) in enumerate(tl["sents"]):
+        key = (S[j][3], tuple(S[j][4]))
+        if out and out[-1]["key"] == key: continue
+        start = tl["start"] if not out else a - LEAD_IN
+        out.append({"key": key, "img": imgs[S[j][3]], "rect": cam_rect(imgs[S[j][3]], S[j][4]), "start": start})
+    return out
+
+def drifted(shot, t):
+    x, y, w, h = shot["rect"]; iw, ih = shot["img"].size
+    f = 1 - min(DRIFT_RATE * max(t - shot["start"], 0), DRIFT_MAX)
+    ax = x / (iw - w) if iw - w > 1 else 0.5
+    ay = y / (ih - h) if ih - h > 1 else 0.5
+    return (x + w * (1 - f) * ax, y + h * (1 - f) * ay, w * f, h * f)
+
+def camera(sh, g, t):
+    if g == 0 or sh[g]["img"] is not sh[g - 1]["img"]:
+        return drifted(sh[g], t)
+    p, q = camera(sh, g - 1, sh[g]["start"]), drifted(sh[g], t)
+    u = ease((t - sh[g]["start"]) / glide_time(p, sh[g]["rect"]))
+    # zoom on a log scale (even pace whatever the ratio); the centre follows
+    w = p[2] * (q[2] / p[2]) ** u; h = w * p[3] / p[2]
+    cx = p[0] + p[2] / 2 + (q[0] + q[2] / 2 - p[0] - p[2] / 2) * u
+    cy = p[1] + p[3] / 2 + (q[1] + q[3] / 2 - p[1] - p[3] / 2) * u
+    iw, ih = sh[g]["img"].size
+    return (min(max(cx - w / 2, 0), iw - w), min(max(cy - h / 2, 0), ih - h), w, h)
+
+def glide_time(p, q):
+    zoom = abs(math.log(q[2] / p[2]))
+    pan = math.hypot(q[0] + q[2] / 2 - p[0] - p[2] / 2, q[1] + q[3] / 2 - p[1] - p[3] / 2) / min(p[2], q[2])
+    return min(max(GLIDE, 1.0 + 0.9 * zoom + 0.6 * pan), 2.6)
+
+def view(img, r):
+    return img.resize((W, H), Image.BILINEAR, box=(r[0], r[1], r[0] + r[2], r[1] + r[3]))
+
 def render_section(si, tl, imgs, t):
     sec = SECTIONS[si]; S = sec["sentences"]; sents = tl["sents"]
     k = 0
     for j, (a, b) in enumerate(sents):
-        if t >= a - 0.3: k = j
-    img1 = imgs[S[k][3]]
-    def rect_at(j):
-        return cam_rect(imgs[S[j][3]], S[j][4])
-    a = sents[k][0] - 0.3
-    u = ease((t - a) / 1.2) if k > 0 else 1.0
-    r0 = rect_at(k - 1) if k > 0 else rect_at(0); r1 = rect_at(k)
-    since = max(t - (a if k > 0 else tl["start"]), 0)
-    def lerp(p, q): return tuple(pp + (qq - pp) * u for pp, qq in zip(p, q))
-    iw, ih = img1.size
-    def drift(r, s):
-        x, y, w, h = r; f = 1 - min(0.0045 * s, 0.04)
-        ax = x / (iw - w) if iw - w > 1 else 0.5
-        ay = y / (ih - h) if ih - h > 1 else 0.5
-        return (x + w * (1 - f) * ax, y + h * (1 - f) * ay, w * f, h * f)
-    img0, img1 = imgs[S[k - 1][3]] if k > 0 else imgs[S[0][3]], imgs[S[k][3]]
-    if img0 is img1:
-        r = drift(lerp(r0, r1), since)
-        frame = img1.resize((W, H), Image.BILINEAR, box=(r[0], r[1], r[0] + r[2], r[1] + r[3]))
-    else:
-        r = drift(r1, since)
-        f1 = img1.resize((W, H), Image.BILINEAR, box=(r[0], r[1], r[0] + r[2], r[1] + r[3]))
-        rp = drift(r0, since + 5)
-        f0 = img0.resize((W, H), Image.BILINEAR, box=(rp[0], rp[1], rp[0] + rp[2], rp[1] + rp[3]))
-        frame = Image.blend(f0, f1, ease((t - a) / 0.6))
+        if t >= a - LEAD_IN: k = j
+    sh = shots(si, tl, imgs)
+    g = max(i for i, x in enumerate(sh) if x["start"] <= t) if t >= sh[0]["start"] else 0
+    r = camera(sh, g, t)
+    frame = view(sh[g]["img"], r)
+    if g > 0 and sh[g]["img"] is not sh[g - 1]["img"] and t < sh[g]["start"] + PICTURE_XF:
+        prev = view(sh[g - 1]["img"], camera(sh, g - 1, t))
+        frame = Image.blend(prev, frame, ease((t - sh[g]["start"]) / PICTURE_XF))
     # highlight: spotlight + outline
     hl = S[k][5]
     if hl:
         boxes = hl if isinstance(hl, list) else [hl]
         nxt = S[k + 1][5] if k + 1 < len(S) else None
-        alpha = clamp01((t - (sents[k][0] - 0.1)) / 0.45)
+        prv = S[k - 1][5] if k > 0 else None
+        alpha = 1.0 if prv == hl else ease((t - (sents[k][0] - 0.1)) / 0.45)
         if nxt != hl:
-            end = sents[k + 1][0] - 0.3 if k + 1 < len(S) else tl["end"] - 0.2
-            alpha *= clamp01((end - t) / 0.35)
+            end = sents[k + 1][0] - LEAD_IN if k + 1 < len(S) else tl["end"] - 0.2
+            alpha *= ease((end - t) / 0.35)
         if alpha > 0:
             sx, sy = W / r[2], H / r[3]
             arr = np.asarray(frame).astype(np.float32)
@@ -176,6 +201,12 @@ def render_section(si, tl, imgs, t):
     return frame
 
 def main():
+    if os.environ.get("REUSE_AUDIO"):
+        tl = json.load(open(os.path.join(OUT, "timeline.json")))
+        secs, total = tl["sections"], tl["total"]
+        print("reusing out/narration-raw.wav, out/captions.srt and out/timeline.json (%.1fs)" % total)
+        render(secs, total)
+        return
     sr, clips = synth()
     secs, total = timeline(clips, sr)
     audio = np.zeros(int(total * sr) + sr, np.float32); k = 0
@@ -190,6 +221,9 @@ def main():
     json.dump({"total": total, "sections": secs}, open(os.path.join(OUT, "timeline.json"), "w"), indent=1)
     print("total %.1fs, %d cues, longest cue %.1fs" % (total, len(cues), max(b - a for a, b, _ in cues)))
     if "audio" in only: return
+    render(secs, total)
+
+def render(secs, total):
     imgs = {k_: Image.open(os.path.join(D, v)).convert("RGB") for k_, v in IMAGES.items()}
     nfr = int(math.ceil(total * FPS))
     raw = os.path.join(OUT, "video.mkv")

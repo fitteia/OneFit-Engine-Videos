@@ -25,7 +25,9 @@ npm install
 ./make.sh
 ```
 
-`make.sh` renders the slides, synthesizes the narration sentence by sentence (`narration.py` holds each sentence's caption text, spoken text, camera framing and highlight), renders the frames (`build.py`), normalizes the narration to −16 LUFS with a −1.5 dBTP ceiling, and writes `../ofe-go-gui-introduction.mp4` with its embedded subtitles, plus the `.srt` and the script. Piper's synthesis varies slightly from run to run, so each build's timings, and with them its subtitles, are its own: release the MP4 together with the `.srt` from the same build.
+`make.sh` renders the slides, synthesizes the narration sentence by sentence (`narration.py` holds each sentence's caption text, spoken text, camera framing and highlight), renders the frames (`build.py`), normalizes the narration to −16 LUFS with a −1.5 dBTP ceiling, and writes `../ofe-go-gui-introduction.mp4` with its embedded subtitles, plus the `.srt` and the script. Piper's synthesis varies slightly from run to run, so each build's timings, and with them its subtitles, are its own: release the MP4 together with the `.srt` from the same build. To change only the picture (slides, framing, highlights), run `REUSE_AUDIO=1 ./make.sh`: it keeps the narration, subtitles and timing that the previous build left in `build/out/`.
+
+The camera is continuous: sentences with the same picture and framing share one slow push-in (at most 3%), a new framing glides there from wherever the camera is (longer for bigger moves, zooming at an even pace), and a new picture crossfades in.
 
 `build/shots/` holds the four GUI screens the video uses, captured at 3840×2160 from a real run. `build/capture/` holds the Playwright scripts that captured them; they drive a running OFE-GUI and contain that session's paths and job IDs, so adjust them before capturing again.
 
