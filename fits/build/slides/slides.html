@@ -1,0 +1,169 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>slides</title>
+<style>
+  :root { --bg:#0f1418; --panel:#161d23; --ink:#e4edf5; --dim:#8fa3b5; --teal:#2cc4b5; --orange:#f2a64f; --blue:#4a9be0; --line:#26313a; }
+  html,body { margin:0; width:1920px; height:1080px; background:var(--bg); color:var(--ink); font-family:"Liberation Sans","DejaVu Sans",sans-serif; overflow:hidden; }
+  .slide { position:absolute; inset:0; display:none; padding:100px 140px; box-sizing:border-box;
+    background: radial-gradient(1200px 700px at 85% 15%, rgba(44,196,181,.10), transparent 60%), radial-gradient(900px 600px at 10% 95%, rgba(242,166,79,.08), transparent 60%), var(--bg); }
+  .slide.on { display:flex; flex-direction:column; justify-content:center; }
+  .kicker { font-size:30px; letter-spacing:.18em; text-transform:uppercase; color:var(--teal); font-weight:700; }
+  .kicker code { text-transform:none; letter-spacing:.02em; font-family:"DejaVu Sans Mono","Liberation Mono",monospace; }
+  h1 { font-size:96px; margin:24px 0 18px; line-height:1.05; }
+  h2 { font-size:68px; margin:18px 0 22px; line-height:1.1; }
+  .sub { font-size:40px; color:var(--dim); line-height:1.35; max-width:1500px; }
+  .brand { display:flex; align-items:center; gap:36px; }
+  .brand img { width:190px; }
+  .rule { height:6px; width:180px; background:linear-gradient(90deg,var(--teal),var(--orange)); border-radius:3px; margin:34px 0; }
+  .term { align-self:flex-start; margin-top:22px; background:#05080a; border:2px solid var(--line); border-radius:18px; padding:28px 38px; font-family:"DejaVu Sans Mono","Liberation Mono",monospace; font-size:26px; line-height:1.5; white-space:pre; color:#d6e2ec; box-shadow:0 30px 80px rgba(0,0,0,.5); }
+  .term span[data-hl] { display:inline-block; }
+  .p { color:#5fd38d; font-weight:700; } .hl { color:var(--orange); font-weight:700; } .m { color:var(--dim); }
+  .bar { align-self:flex-start; display:flex; gap:22px; flex-wrap:wrap; margin-top:30px; }
+  .chip { background:var(--panel); border:2px solid var(--line); border-radius:14px; padding:18px 28px; font-size:32px; }
+  .chip b { color:var(--teal); }
+  .cards { display:grid; grid-template-columns:repeat(2,1fr); gap:34px; margin-top:40px; }
+  .card { background:var(--panel); border:2px solid var(--line); border-radius:22px; padding:36px 40px; box-sizing:border-box; }
+  .card h3 { font-size:42px; margin:0 0 16px; font-family:"DejaVu Sans Mono","Liberation Mono",monospace; color:var(--teal); }
+  .card h3.plain { font-family:inherit; color:var(--ink); }
+  .card p { font-size:31px; color:var(--dim); line-height:1.4; margin:0; }
+  /* machines and tunnels */
+  .net { display:flex; align-items:stretch; gap:0; margin-top:34px; }
+  .host { border:3px solid var(--line); border-radius:24px; padding:26px 30px 30px; background:rgba(22,29,35,.85); display:flex; flex-direction:column; gap:16px; min-width:440px; box-sizing:border-box; }
+  .host.here { border-color:#3b5568; }
+  .host.there { border-color:#6b5532; }
+  .host .name { font-size:26px; letter-spacing:.14em; text-transform:uppercase; font-weight:700; color:var(--dim); }
+  .box { background:#0b1014; border:2px solid var(--line); border-radius:14px; padding:16px 22px; font-size:32px; }
+  .box small { display:block; font-size:24px; color:var(--dim); margin-top:4px; font-family:"DejaVu Sans Mono","Liberation Mono",monospace; }
+  .box.gui { border-color:var(--teal); }
+  .box.dim { opacity:.35; }
+  .link { flex:1; display:flex; flex-direction:column; justify-content:center; align-items:center; padding:0 20px; min-width:280px; }
+  .link .pipe { width:100%; height:16px; border-radius:8px; background:repeating-linear-gradient(90deg, var(--orange) 0 26px, transparent 26px 40px); }
+  .link .lbl { font-size:28px; color:var(--orange); font-weight:700; margin:14px 0; text-align:center; line-height:1.3; }
+  .link .lbl.top { margin-top:0; }
+  .rows { display:grid; grid-template-columns:auto 1fr; gap:18px 40px; margin-top:34px; align-items:baseline; }
+  .rows .k { font-family:"DejaVu Sans Mono","Liberation Mono",monospace; font-size:36px; color:var(--teal); font-weight:700; white-space:nowrap; }
+  .rows .v { font-size:34px; color:var(--ink); line-height:1.35; }
+  .rows .v span { color:var(--dim); }
+  .fine { font-size:31px; color:var(--dim); line-height:1.5; max-width:1600px; }
+  .flow { display:flex; align-items:center; gap:28px; margin:10px 0 50px; font-size:50px; font-weight:700; }
+  .flow span.a { color:var(--dim); font-weight:400; }
+  .badge { align-self:flex-start; display:inline-block; margin-top:46px; padding:14px 30px; border:3px solid var(--orange); color:var(--orange); border-radius:12px; font-size:30px; font-weight:700; letter-spacing:.2em; }
+  .term.wide { font-size:23px; padding:24px 32px; }
+  .slide[data-wide] { padding:90px 80px; }
+  .slide[data-wide] .term.wide { font-size:22.5px; }
+  .json { align-self:stretch; margin-top:30px; background:#05080a; border:2px solid var(--line); border-radius:18px; padding:26px 36px; font-family:"DejaVu Sans Mono","Liberation Mono",monospace; font-size:27px; line-height:1.55; white-space:pre; color:#d6e2ec; }
+  .json .k { color:var(--teal); font-weight:700; } .json .s { color:#d6e2ec; } .json .c { color:var(--dim); }
+  .json span[data-hl] { display:inline-block; }
+  .two { display:grid; grid-template-columns:1fr 1fr; gap:40px; margin-top:36px; }
+  .two .card h3 { margin-bottom:22px; }
+  .two .card p + p { margin-top:18px; }
+  .two .card p b { color:var(--ink); white-space:nowrap; }
+  .cards.three { grid-template-columns:repeat(3,1fr); }
+</style></head>
+<body>
+
+<section class="slide" id="title">
+  <div class="brand"><img src="logo-dark.svg" alt=""><div>
+    <div class="kicker">OFE-GUI · OFE-Go</div>
+    <h1>Fits, saved fits and batches</h1>
+    <div class="sub">a model with data, a saved JSON or SAV fit,<br>or many fits at once</div>
+  </div></div>
+  <div class="rule" style="margin-left:226px"></div>
+  <div class="sub" style="margin-left:226px;font-size:32px">and the fits that run in parallel</div>
+</section>
+
+<section class="slide" id="inputs">
+  <div class="kicker">Three ways to start</div>
+  <h2>What OFE fits</h2>
+  <div class="cards three">
+    <div class="card" data-hl="model"><h3 class="plain">Model + data files</h3><p>A model expression, with starting values and limits, and one or more data files.</p></div>
+    <div class="card" data-hl="saved"><h3 class="plain">A saved fit</h3><p>A <b style="color:var(--ink)">.json</b> (or an older <b style="color:var(--ink)">.sav</b>) that holds the model, the data and the results.</p></div>
+    <div class="card" data-hl="batch"><h3 class="plain">A batch</h3><p>Several saved fits, or a jobs file with one fit per line, run in parallel.</p></div>
+  </div>
+  <div class="bar" data-hl="where"><div class="chip"><b>OFE-GUI</b> a tab or a button</div><div class="chip"><b>OFE-Go</b> the arguments of <b>onefite fit</b></div></div>
+</section>
+
+<section class="slide" id="model" data-wide>
+  <div class="kicker">Model + data files</div>
+  <h2>44 relaxation curves, one command</h2>
+  <div class="term wide"><span data-hl="cmd"><span class="p">$</span> onefite fit <span class="hl">'Mz(t,M0:1,Minf:0.05,T1:2[0.01&lt;100])=Minf+(M0-Minf)*exp(-t/T1)'</span> <span data-hl="file"><span class="hl">T005F1_1.sdf</span></span> \</span>
+<span data-hl="opts">    <span class="hl">--individual</span> --reduced-chi2 --fit-methods='simp scan min' <span data-hl="save"><span class="hl">--save-to=t005.json</span></span></span>
+<span data-hl="rows"><span class="m"># TAG, Npts, chi2, dum_1, dum_2, M0, ±err, Minf, ±err, T1, ±err</span>
+T005F1_1-008000000-z001_007, 20, 17, 8000000, 1, 0.0146134, 0.00934074, 0.993957, 0.0062994, <span class="hl">3.28809, 0.0841043</span>
+<span class="m">  …</span>
+T005F1_1-000245271-z001_026, 20, 17, 245271.4117, 1, 1.10489, 0.00406065, 0.0750538, 0.00360583, <span class="hl">2.72724, 0.0338499</span>
+<span class="m">  …</span>
+T005F1_1-000003005-z001_050, 20, 17, 3005.5876, 1, 1.11925, 0.00522219, 0.0407131, 0.0045323, <span class="hl">1.99797, 0.0302714</span></span>
+<span class="m">------------------- tchi2 = 0.048264855, tnpts = 880, nfps = 132 -------------------</span></div>
+</section>
+
+<section class="slide" id="json">
+  <div class="kicker">A saved fit · <code>t005.json</code></div>
+  <h2>The whole fit, in one file</h2>
+  <div class="json"><span data-hl="model"><span class="k">"Function"</span>: <span class="s">"Mz = Minf+(M0-Minf)*exp(-t/T1)"</span>,  <span class="k">"Parameters"</span>: <span class="s">"M0,Minf,T1"</span>,
+<span class="k">"Pval2"</span>: <span class="s">"3.28809"</span>,  <span class="k">"Pmin2"</span>: <span class="s">"0.01"</span>,  <span class="k">"Pmax2"</span>: <span class="s">"100"</span>,  <span class="k">"F2"</span>: <span class="s">"Free"</span>,  <span class="c">…</span></span>
+<span data-hl="dados"><span class="k">"Dados"</span>: <span class="s">"# DATA dum = 8000000 1
+          # TAG = T005F1_1-008000000-z001_007
+          25.2 0.971663 1
+          20.31485 0.994346 1  …"</span>,</span>
+<span data-hl="t"><span class="k">"T"</span>: <span class="s">"dum"</span>,</span>
+<span data-hl="tags"><span class="k">"Tags"</span>: [<span class="s">"T005F1_1-008000000-z001_007"</span>, <span class="s">"T005F1_1-006659399-z001_008"</span>, <span class="c">… 44 tags</span>],
+<span class="k">"FitType"</span>: <span class="s">"Individual"</span>,  <span class="c">… the results, the plots' settings, the fit log</span></span></div>
+</section>
+
+<section class="slide" id="jsoncli" data-wide>
+  <div class="kicker">A saved fit · OFE-Go</div>
+  <h2>Fit it again, or part of it</h2>
+  <div class="term wide" data-hl="resume"><span class="p">$</span> onefite fit <span class="hl">t005.json</span>   <span class="m"># starts from the saved values, in the saved mode</span></div>
+  <div class="term wide" data-hl="sel"><span class="p">$</span> onefite fit --reduced-chi2 <span class="hl">--selected-dataset='#1-#4'</span> t005.json
+<span class="m">T005F1_1-008000000-z001_007, 20, 17, 8000000, 1, 1, 0.0146327, 0.00933955, 0.993957, 0.00629913, 3.28789, 0.0840858
+  … 3 more blocks
+------------------- tchi2 = 0.009714507, tnpts = 80, nfps = 12 -------------------</span></div>
+  <div class="term wide" data-hl="sav"><span class="p">$</span> onefite fit <span class="hl">test5.sav</span>
+<span class="m">------------------- tchi2 = 0.0241003, tnpts = 52, nfps = 6 -------------------</span>
+<span class="p">$</span> onefite convert <span class="hl">test5.sav test5.json</span></div>
+</section>
+
+<section class="slide" id="batch" data-wide>
+  <div class="kicker">A batch · OFE-Go</div>
+  <h2>Many fits, one command</h2>
+  <div class="term wide" data-hl="jobs"><span class="p">$</span> cat fits.txt   <span class="m"># one fit per line: TAB-separated fields</span>
+Mz(t,M0:1,Minf:0.05,T1:2[0.01&lt;100])=Minf+(M0-Minf)*exp(-t/T1)<span class="m">→</span>T005F1_1.sdf<span class="m">→</span><span class="hl">--individual</span>
+Mz(t,M0:1,Minf:0.05,T1:2[0.01&lt;100],b:0.9[0.3&lt;1])=Minf+(M0-Minf)*exp(-pow(t/T1,b))<span class="m">→</span>T005F1_1.sdf<span class="m">→</span><span class="hl">--individual</span>
+t005.json<span class="m">→</span><span class="hl">--global</span></div>
+  <div class="term wide" data-hl="run"><span class="p">$</span> onefite fit <span class="hl">@fits.txt --jobs=2</span> --reduced-chi2 --fit-methods='simp scan min' --wf=results
+<span data-hl="out"><span class="m">===> 3 fits, 2 at once (2 workers each), in results/batch-20261027-090858</span>
+     fit-T005F1_1-individual    done       0.7 s  chi2 0.048264855
+     fit-T005F1_1-individual-2  done       0.8 s  chi2 0.050190554
+     t005-global                done       0.3 s  chi2 <span class="hl">41.076165</span>
+<span class="m">===> 3 done, 0 failed, 0 stopped - results/batch-20261027-090858/batch.json</span></span></div>
+  <div class="bar" data-hl="also"><div class="chip"><b>onefite fit a.json b.json c.json</b> runs saved fits the same way</div></div>
+</section>
+
+<section class="slide" id="parallel">
+  <div class="kicker">Parallel fits</div>
+  <h2>Two levels of parallel work</h2>
+  <div class="two">
+    <div class="card" data-hl="inside"><h3 class="plain">Inside one fit</h3>
+      <p>An <b>individual</b> fit runs its blocks at the same time; a <b>hybrid</b> fit, its per-block parts.</p>
+      <p data-hl="workers"><b>--workers=N</b> caps them, at the CPUs by default; <b>--no-parallel</b> runs one at a time. <span style="opacity:.8">OFE-GUI: Workers, parallel.</span></p></div>
+    <div class="card" data-hl="across"><h3 class="plain">Across fits</h3>
+      <p>A <b>batch</b> runs <b>--jobs</b> fits at once, as many as the CPUs by default. <span style="opacity:.8">OFE-GUI: Fits at once.</span></p>
+      <p data-hl="share">Each fit gets CPUs ÷ jobs workers, unless you set <b>--workers</b>: 4 CPUs, 2 at once, <b>2 workers each</b>.</p></div>
+  </div>
+  <div class="fine" data-hl="where" style="margin-top:40px;align-self:flex-start">Parallel fits run with the engine on OFE-GUI's own machine: on your computer, or on the server with <b style="color:var(--ink)">-ssh</b>.</div>
+</section>
+
+<section class="slide" id="close">
+  <div class="kicker">OFE-GUI · OFE-Go</div>
+  <div class="flow">Model + data <span class="a">·</span> saved fits <span class="a">·</span> batches</div>
+  <div class="bar"><div class="chip"><b>onefite man</b> or <b>man onefite</b> describes every option</div><div class="chip"><b>Help</b> in OFE-GUI</div></div>
+  <div class="rule"></div>
+  <div class="fine">Both OFE-Go and OFE-GUI are currently distributed under the Artistic License 2.0.<br>A separate commercial license for eligible project code is in preparation.</div>
+  <div class="badge">PRE-FINAL VERSION</div>
+</section>
+
+<script>
+  const id = new URLSearchParams(location.search).get("s") || "title";
+  document.getElementById(id).classList.add("on");
+</script>
+</body></html>

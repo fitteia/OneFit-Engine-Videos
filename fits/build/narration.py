@@ -1,0 +1,146 @@
+NAME = "ofe-fits-batches-parallel"
+TITLE = "Fits, saved fits and batches"
+IMAGES = {
+    "title": "slides/title.png", "inputs": "slides/inputs.png", "model": "slides/model.png",
+    "json": "slides/json.png", "jsoncli": "slides/jsoncli.png", "batch": "slides/batch.png",
+    "parallel": "slides/parallel.png", "close": "slides/close.png",
+    "gui": "shots/10-model.png", "viewer": "shots/20-json.png", "tags": "shots/21-json-tags.png",
+    "jobs": "shots/30-jobs.png", "done": "shots/40-batch.png", "global": "shots/41-batch-global.png",
+}
+
+# Each sentence: caption text, spoken text (pronunciation fixes), optional
+# length_scale, and the shot: image, camera (x, y, width in source px; height
+# follows 16:9) and an optional highlight: a box (x0, y0, x1, y1), a list of
+# boxes, or slide element names ("slide:name") from slides/boxes.json.
+FULL = (0, 0, 3840)
+GUI_ALL = (55, 62, 3730)
+FORM = (0, 180, 1700)
+RESULTS = (1100, 600, 2740)
+VIEWER = (780, 330, 2300)
+
+SECTIONS = [
+  {"title": "Fits, saved fits and batches", "label": None, "sentences": [
+    ("This tour shows the ways to start a fit, and how OFE-GUI and OFE-Go run many fits at once.",
+     "This tour shows the ways to start a fit, and how O F E GUI and O F E Go run many fits at once.", None, "title", FULL, None),
+    ("It uses one real field-cycling NMR measurement: 44 relaxation curves, from 8 megahertz down to 3 kilohertz.",
+     "It uses one real field-cycling N M R measurement: forty-four relaxation curves, from eight megahertz, down to three kilohertz.", None, "title", (120, 70, 3600), None),
+  ]},
+  {"title": "Three ways to start", "label": None, "sentences": [
+    ("There are three ways to start a fit.",
+     None, None, "inputs", FULL, None),
+    ("A model expression with data files,",
+     None, None, "inputs", FULL, "inputs:model"),
+    ("a saved fit, in JSON or the older SAV format,",
+     "a saved fit, in JSON, or the older S A V format,", None, "inputs", FULL, "inputs:saved"),
+    ("or a batch of fits that run in parallel.",
+     None, None, "inputs", FULL, "inputs:batch"),
+    ("In OFE-GUI each is a tab or a button; in OFE-Go, the arguments of onefite fit.",
+     "In O F E GUI, each is a tab or a button; in O F E Go, the arguments of its fit command.", None, "inputs", FULL, "inputs:where"),
+  ]},
+  {"title": "A model and data files", "label": None, "sentences": [
+    ("First, a model and data: the model expression, with starting values and limits, and the data file.",
+     None, None, "model", FULL, "model:cmd"),
+    ("This Stelar file holds all 44 curves; each becomes a data block, tagged with its field.",
+     "This Stelar file holds all forty-four curves; each becomes a data block, tagged with its field.", None, "model", FULL, "model:file"),
+    ("--individual fits every block on its own: one line of results per block.",
+     "The individual option fits every block on its own: one line of results per block.", None, "model", FULL, "model:rows"),
+    ("--save-to writes the whole fit to t005.json.",
+     "The save to option writes the whole fit to T zero zero five dot JSON.", None, "model", FULL, "model:save"),
+  ]},
+  {"title": "In OFE-GUI", "label": "OFE-GUI · Function + data files", "sentences": [
+    ("In OFE-GUI, that is the Function + data files tab: the model, and the Stelar file, uploaded from this computer.",
+     "In O F E GUI, that is the Function and data files tab: the model, and the Stelar file, uploaded from this computer.", None, "gui", FORM, (15, 346, 1133, 586)),
+    ("The fit mode is Individual, and Save engine description names the JSON file.",
+     None, None, "gui", GUI_ALL, [(1759, 73, 1949, 131), (15, 1321, 1133, 1373)]),
+    ("Plots shows every block's fit, and Output lists the 44 results.",
+     "Plots shows every block's fit, and Output lists the forty-four results.", None, "gui", RESULTS, [(1181, 845, 2573, 2112), (2630, 874, 3830, 1949)]),
+    ("T1 grows from 2.00 seconds at 3 kilohertz to 3.29 seconds at 8 megahertz.",
+     "T one grows from two seconds at three kilohertz, to three point two nine seconds at eight megahertz.", None, "gui", (2000, 1100, 1840), (2630, 1845, 3830, 1949)),
+    ("In the Terminal: this server has four CPUs, and the saved file has 44 DATA blocks.",
+     "In the Terminal: this server has four C P Us, and the saved file has forty-four data blocks.", None, "gui", (1050, 120, 1900), (1200, 269, 1920, 413)),
+  ]},
+  {"title": "A saved fit", "label": None, "sentences": [
+    ("The saved JSON describes the whole fit.",
+     None, None, "json", FULL, None),
+    ("Function and Parameters hold the model, with each parameter's value, limits, and fixed or free state.",
+     None, None, "json", FULL, "json:model"),
+    ("Dados holds the data. Each block starts with a DATA line and a TAG line, which names it.",
+     "Dados holds the data. Each block starts with a data line, and a tag line, which names it.", None, "json", FULL, "json:dados"),
+    ("The DATA line gives the block its own values of T, the per-block variable, here called dum: the field, in hertz.",
+     "The data line gives the block its own values of T, the per-block variable, here called dum: the field, in hertz.", None, "json", FULL, ["json:dados", "json:t"]),
+    ("Tags lists the blocks to fit, and FitType remembers the mode.",
+     "Tags lists the blocks to fit, and Fit Type remembers the mode.", None, "json", FULL, "json:tags"),
+  ]},
+  {"title": "A saved fit in OFE-GUI", "label": "OFE-GUI · JSON/SAV/Jobs", "sentences": [
+    ("In OFE-GUI, the JSON/SAV/Jobs tab takes saved fits, and Edit shows one field by field.",
+     "In O F E GUI, the JSON, SAV, Jobs tab takes saved fits; and Edit shows one, field by field.", None, "viewer", GUI_ALL, [(15, 211, 1133, 576), (850, 518, 2990, 1670)]),
+    ("Click a field to edit it.",
+     None, None, "viewer", VIEWER, (850, 518, 2990, 1670)),
+    ("To rename T, Shift+T opens it on one line; the new name is carried into the model and every block.",
+     "To rename T, Shift T opens it on one line; the new name is carried into the model, and into every block.", None, "tags", VIEWER, (850, 725, 2990, 775)),
+    ("Write All in Tags, and saving puts in the tag of every block in Dados.",
+     None, None, "tags", VIEWER, (850, 775, 2990, 876)),
+  ]},
+  {"title": "A saved fit in OFE-Go", "label": None, "sentences": [
+    ("OFE-Go fits a saved file directly, starting from its saved values, in its saved mode.",
+     "O F E Go fits a saved file directly, starting from its saved values, in its saved mode.", None, "jsoncli", FULL, "jsoncli:resume"),
+    ("--selected-dataset fits some of its blocks, for one run: by tag, by position, or a range such as #1-#4.",
+     "The selected data set option fits some of its blocks, for one run: by tag, by position, or a range, such as one to four.", None, "jsoncli", FULL, "jsoncli:sel"),
+    ("In OFE-GUI, that is Selected data sets, where all picks every block of the file.",
+     "In O F E GUI, that is Selected data sets, where all, picks every block of the file.", None, "jsoncli", FULL, "jsoncli:sel"),
+    ("A SAV file fits the same way, and convert turns it into JSON.",
+     "An S A V file fits the same way, and convert turns it into JSON.", None, "jsoncli", FULL, "jsoncli:sav"),
+  ]},
+  {"title": "A batch", "label": None, "sentences": [
+    ("A batch runs many complete fits with one command.",
+     None, None, "batch", FULL, None),
+    ("A jobs file has one fit per line: a model and its data, or a saved fit, each with its own options.",
+     None, None, "batch", FULL, "batch:jobs"),
+    ("Here: the same data with two models, fitted individually, and the saved fit, fitted globally.",
+     None, None, "batch", FULL, "batch:jobs"),
+    ("--jobs sets how many fits run at once. Each fit gets its own folder in a new batch folder, and batch.json records them all.",
+     "The jobs option sets how many fits run at once. Each fit gets its own folder, in a new batch folder; and batch dot JSON records them all.", None, "batch", FULL, "batch:out"),
+    ("If one fit fails, the others keep running. Several saved fits run the same way.",
+     None, None, "batch", FULL, "batch:also"),
+  ]},
+  {"title": "A batch in OFE-GUI", "label": "OFE-GUI · Jobs", "sentences": [
+    ("In OFE-GUI, Jobs edits a jobs file as a table.",
+     "In O F E GUI, Jobs edits a jobs file as a table.", None, "jobs", FULL, None),
+    ("Models × data adds a row for every model line on every data file, and each row can have its own fit mode and options.",
+     "Models times data adds a row for every model line on every data file; and each row can have its own fit mode, and options.", None, "jobs", FULL, [(48, 278, 3792, 538), (173, 2054, 369, 2112)]),
+    ("Save and use makes it the input of the next fit.",
+     None, None, "jobs", FULL, (3481, 2054, 3673, 2112)),
+    ("Fits at once is 2, so two fits run together.",
+     "Fits at once is two, so two fits run together.", None, "done", (0, 560, 1700), (768, 1133, 1133, 1181)),
+    ("The Fits bar shows each fit's state and chi-square, and Output the whole batch.",
+     None, None, "done", (1700, 120, 2140), [(2650, 211, 3830, 422), (2640, 1546, 3830, 1940)]),
+    ("Click a fit to see its plots and parameters. The global fit, one T1 for every field, can't follow the data:",
+     "Click a fit, to see its plots and parameters. The global fit, one T one for every field, can't follow the data:", None, "global", GUI_ALL, [(2650, 374, 2970, 419), (1181, 845, 2573, 2112)]),
+    ("its chi-square is 41, against 0.048 for the individual fits.",
+     "its chi-square is forty-one, against zero point zero four eight for the individual fits.", None, "global", (1700, 120, 2140), (2650, 326, 3571, 419)),
+  ]},
+  {"title": "Parallel fits", "label": None, "sentences": [
+    ("Fits run in parallel at two levels.",
+     None, None, "parallel", FULL, None),
+    ("Inside one fit, the blocks of an individual fit run at the same time, and so do the per-block parts of a hybrid fit.",
+     None, None, "parallel", FULL, "parallel:inside"),
+    ("--workers caps how many, at the number of CPUs by default, and --no-parallel runs them one at a time.",
+     "The workers option caps how many, at the number of C P Us by default; and no parallel runs them one at a time.", None, "parallel", FULL, "parallel:workers"),
+    ("Across fits, a batch runs --jobs fits at once, as many as the CPUs by default.",
+     "Across fits, a batch runs as many fits at once as the jobs option says; by default, as many as the C P Us.", None, "parallel", FULL, "parallel:across"),
+    ("Each fit then gets its share of the CPUs: four CPUs and two fits at once give two workers each.",
+     "Each fit then gets its share of the C P Us: four C P Us, and two fits at once, give two workers each.", None, "parallel", FULL, "parallel:share"),
+    ("Parallel fits need the engine on OFE-GUI's own machine: your computer, or the server with -ssh.",
+     "Parallel fits need the engine on O F E GUI's own machine: your computer, or the server, with dash S S H.", None, "parallel", FULL, "parallel:where"),
+  ]},
+  {"title": "Closing", "label": None, "sentences": [
+    ("Model and data, saved fits, and batches: three ways in, one engine.",
+     None, None, "close", FULL, None),
+    ("onefite man describes every option, and Help does the same in OFE-GUI.",
+     "The engine's manual describes every option, and Help does the same in O F E GUI.", None, "close", FULL, None),
+    ("Both OFE-Go and OFE-GUI are currently distributed under the Artistic License 2.0.",
+     "Both O F E Go and O F E GUI are currently distributed under the Artistic License two point zero.", None, "close", FULL, None),
+    ("A separate commercial license for eligible project code is in preparation.",
+     None, None, "close", FULL, None),
+  ]},
+]

@@ -1,0 +1,32 @@
+Fits, saved fits and batches
+This tour shows the ways to start a fit, and how OFE-GUI and OFE-Go run many fits at once. It uses one real field-cycling NMR measurement: 44 relaxation curves, from 8 megahertz down to 3 kilohertz.
+
+Three ways to start
+There are three ways to start a fit. A model expression with data files, a saved fit, in JSON or the older SAV format, or a batch of fits that run in parallel. In OFE-GUI each is a tab or a button; in OFE-Go, the arguments of onefite fit.
+
+A model and data files
+First, a model and data: the model expression, with starting values and limits, and the data file. This Stelar file holds all 44 curves; each becomes a data block, tagged with its field. --individual fits every block on its own: one line of results per block. --save-to writes the whole fit to t005.json.
+
+In OFE-GUI
+In OFE-GUI, that is the Function + data files tab: the model, and the Stelar file, uploaded from this computer. The fit mode is Individual, and Save engine description names the JSON file. Plots shows every block's fit, and Output lists the 44 results. T1 grows from 2.00 seconds at 3 kilohertz to 3.29 seconds at 8 megahertz. In the Terminal: this server has four CPUs, and the saved file has 44 DATA blocks.
+
+A saved fit
+The saved JSON describes the whole fit. Function and Parameters hold the model, with each parameter's value, limits, and fixed or free state. Dados holds the data. Each block starts with a DATA line and a TAG line, which names it. The DATA line gives the block its own values of T, the per-block variable, here called dum: the field, in hertz. Tags lists the blocks to fit, and FitType remembers the mode.
+
+A saved fit in OFE-GUI
+In OFE-GUI, the JSON/SAV/Jobs tab takes saved fits, and Edit shows one field by field. Click a field to edit it. To rename T, Shift+T opens it on one line; the new name is carried into the model and every block. Write All in Tags, and saving puts in the tag of every block in Dados.
+
+A saved fit in OFE-Go
+OFE-Go fits a saved file directly, starting from its saved values, in its saved mode. --selected-dataset fits some of its blocks, for one run: by tag, by position, or a range such as #1-#4. In OFE-GUI, that is Selected data sets, where all picks every block of the file. A SAV file fits the same way, and convert turns it into JSON.
+
+A batch
+A batch runs many complete fits with one command. A jobs file has one fit per line: a model and its data, or a saved fit, each with its own options. Here: the same data with two models, fitted individually, and the saved fit, fitted globally. --jobs sets how many fits run at once. Each fit gets its own folder in a new batch folder, and batch.json records them all. If one fit fails, the others keep running. Several saved fits run the same way.
+
+A batch in OFE-GUI
+In OFE-GUI, Jobs edits a jobs file as a table. Models × data adds a row for every model line on every data file, and each row can have its own fit mode and options. Save and use makes it the input of the next fit. Fits at once is 2, so two fits run together. The Fits bar shows each fit's state and chi-square, and Output the whole batch. Click a fit to see its plots and parameters. The global fit, one T1 for every field, can't follow the data: its chi-square is 41, against 0.048 for the individual fits.
+
+Parallel fits
+Fits run in parallel at two levels. Inside one fit, the blocks of an individual fit run at the same time, and so do the per-block parts of a hybrid fit. --workers caps how many, at the number of CPUs by default, and --no-parallel runs them one at a time. Across fits, a batch runs --jobs fits at once, as many as the CPUs by default. Each fit then gets its share of the CPUs: four CPUs and two fits at once give two workers each. Parallel fits need the engine on OFE-GUI's own machine: your computer, or the server with -ssh.
+
+Closing
+Model and data, saved fits, and batches: three ways in, one engine. onefite man describes every option, and Help does the same in OFE-GUI. Both OFE-Go and OFE-GUI are currently distributed under the Artistic License 2.0. A separate commercial license for eligible project code is in preparation.

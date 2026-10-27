@@ -8,6 +8,7 @@ The MP4 files are **release assets**, not files in this repository, so that clon
 | --- | --- | --- | --- |
 | OFE-Go and OFE-GUI introduction (pre-final) | 3:12 | [ofe-go-gui-introduction.mp4](https://github.com/fitteia/OneFit-Engine-Videos/releases/latest/download/ofe-go-gui-introduction.mp4) | [captions](introduction/ofe-go-gui-introduction.srt), [script](introduction/ofe-go-gui-introduction-script.txt), [about](introduction/README.md) |
 | OFE-GUI on remote hosts: `-ssh` and the alternatives (pre-final) | 4:30 | [ofe-gui-remote-hosts.mp4](https://github.com/fitteia/OneFit-Engine-Videos/releases/latest/download/ofe-gui-remote-hosts.mp4) | [captions](remote/ofe-gui-remote-hosts.srt), [script](remote/ofe-gui-remote-hosts-script.txt), [about](remote/README.md) |
+| Fits, saved fits and batches, and parallel fits (pre-final) | 5:22 | [ofe-fits-batches-parallel.mp4](https://github.com/fitteia/OneFit-Engine-Videos/releases/latest/download/ofe-fits-batches-parallel.mp4) | [captions](fits/ofe-fits-batches-parallel.srt), [script](fits/ofe-fits-batches-parallel-script.txt), [about](fits/README.md) |
 
 Every MP4 also has its subtitles as an embedded track; turn them on in the player.
 
@@ -20,7 +21,7 @@ Each video's folder has a `build/` folder with everything needed to rebuild it: 
 Build it, commit the changed captions, script and sources, then attach the MP4 to a new release (from the repository's own clone):
 
 ```sh
-gh release create videos-YYYY-MM-DD introduction/ofe-go-gui-introduction.mp4 remote/ofe-gui-remote-hosts.mp4 --title "Videos YYYY-MM-DD"
+gh release create videos-YYYY-MM-DD introduction/ofe-go-gui-introduction.mp4 remote/ofe-gui-remote-hosts.mp4 fits/ofe-fits-batches-parallel.mp4 --title "Videos YYYY-MM-DD"
 ```
 
 A new release must attach every current video, since `releases/latest` is what the links use.
