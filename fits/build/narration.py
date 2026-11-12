@@ -1,6 +1,7 @@
 NAME = "ofe-fits-batches-parallel"
 TITLE = "Fits, saved fits and batches"
 IMAGES = {
+    "endcard": "../../kit/end-card.png",
     "title": "slides/title.png", "inputs": "slides/inputs.png", "model": "slides/model.png",
     "json": "slides/json.png", "jsoncli": "slides/jsoncli.png", "batch": "slides/batch.png",
     "parallel": "slides/parallel.png", "close": "slides/close.png",
@@ -144,3 +145,6 @@ SECTIONS = [
      None, None, "close", FULL, None),
   ]},
 ]
+
+# the dark social-preview banner, silent, after the last words
+END_CARD = ("endcard", 4.0)

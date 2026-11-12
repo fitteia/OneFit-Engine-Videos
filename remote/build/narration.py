@@ -1,6 +1,7 @@
 NAME = "ofe-gui-remote-hosts"
 TITLE = "OFE-GUI on remote hosts"
 IMAGES = {
+    "endcard": "../../kit/end-card.png",
     "title": "slides/title.png", "why": "slides/why.png", "ssh1": "slides/ssh1.png", "ssh2": "slides/ssh2.png",
     "connect1": "slides/connect1.png", "manual": "slides/manual.png", "reverse": "slides/reverse.png",
     "engine": "slides/engine.png", "choose": "slides/choose.png", "close": "slides/close.png",
@@ -128,3 +129,6 @@ SECTIONS = [
      None, None, "close", FULL, None),
   ]},
 ]
+
+# the dark social-preview banner, silent, after the last words
+END_CARD = ("endcard", 4.0)

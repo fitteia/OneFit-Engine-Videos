@@ -1,6 +1,7 @@
 NAME = "ofe-go-gui-introduction"
 TITLE = "OFE-Go and OFE-GUI introduction"
 IMAGES = {
+    "endcard": "../../kit/end-card.png",
     "title": "slides/title.png", "cli1": "slides/cli1.png", "cli2": "slides/cli2.png",
     "start": "slides/start.png", "modes": "slides/modes.png", "close": "slides/close.png",
     "fit": "shots/10-fit-compact.png", "figures": "shots/22-fig-clean.png", "report": "shots/31-report-full.png", "report_top": "shots/30-report.png",
@@ -98,3 +99,6 @@ SECTIONS = [
      None, None, "close", FULL, None),
   ]},
 ]
+
+# the dark social-preview banner, silent, after the last words
+END_CARD = ("endcard", 4.0)

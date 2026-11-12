@@ -8,6 +8,12 @@ KIT = os.path.dirname(os.path.abspath(__file__))
 D = os.getcwd()
 sys.path.insert(0, D)
 from narration import SECTIONS, IMAGES
+# optional: (picture, seconds) shown silently after the narration, e.g. the
+# social-preview banner (kit/end-card.png)
+try:
+    from narration import END_CARD
+except ImportError:
+    END_CARD = None
 
 VOICE = os.environ.get("OFE_VOICE", os.path.join(KIT, "voices", "en_GB-alba-medium.onnx"))
 OUT = os.path.join(D, "out"); os.makedirs(OUT, exist_ok=True)
@@ -62,6 +68,9 @@ def timeline(clips, sr):
             sents.append((t, t + d)); t += d + GAP; k += 1
         t += TAIL - GAP
         secs.append({"start": s0, "end": t, "sents": sents})
+    if END_CARD:
+        secs.append({"start": t, "end": t + END_CARD[1], "sents": [], "card": END_CARD[0]})
+        t += END_CARD[1]
     return secs, t
 
 # --- captions --------------------------------------------------------------
@@ -184,6 +193,9 @@ def view(img, r):
     return img.resize((W, H), Image.BILINEAR, box=(r[0], r[1], r[0] + r[2], r[1] + r[3]))
 
 def render_section(si, tl, imgs, t):
+    if tl.get("card"):
+        img = imgs[tl["card"]]
+        return view(img, (0, 0) + img.size)
     sec = SECTIONS[si]; S = sec["sentences"]; sents = tl["sents"]
     k = 0
     for j, (a, b) in enumerate(sents):
